@@ -1,11 +1,5 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "nMyMfkrPfeI=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\SistemaGestorV.csproj",
-  "expectedPackageFiles": [],
-=======
   "dgSpecHash": "liRZY9ntvf0=",
   "success": true,
   "projectFilePath": "C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\SistemaGestorV.csproj",
@@ -40,6 +34,12 @@
     "C:\\Users\\Dayana\\.nuget\\packages\\system.windows.extensions\\8.0.0\\system.windows.extensions.8.0.0.nupkg.sha512",
     "C:\\Users\\Dayana\\.nuget\\packages\\zstdsharp.port\\0.8.5\\zstdsharp.port.0.8.5.nupkg.sha512"
   ],
->>>>>>> main
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problema al leer el archivo de caché C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

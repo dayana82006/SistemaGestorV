@@ -1,13 +1,6 @@
 {
   "version": 3,
   "targets": {
-<<<<<<< HEAD
-    "net8.0": {}
-  },
-  "libraries": {},
-  "projectFileDependencyGroups": {
-    "net8.0": []
-=======
     "net8.0": {
       "BouncyCastle.Cryptography/2.5.1": {
         "type": "package",
@@ -1614,7 +1607,6 @@
     "net8.0": [
       "MySql.Data >= 9.3.0"
     ]
->>>>>>> main
   },
   "packageFolders": {
     "C:\\Users\\Dayana\\.nuget\\packages\\": {}
@@ -1657,15 +1649,12 @@
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
-<<<<<<< HEAD
-=======
         "dependencies": {
           "MySql.Data": {
             "target": "Package",
             "version": "[9.3.0, )"
           }
         },
->>>>>>> main
         "imports": [
           "net461",
           "net462",
@@ -1685,5 +1674,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problema al leer el archivo de caché C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
