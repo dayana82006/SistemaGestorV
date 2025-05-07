@@ -20,13 +20,9 @@ internal class Program
         return "========= MENÚ PRINCIPAL =========\n\n" +
                "1. Gestión de Productos\n" +
                "2. Gestión de Terceros\n" +
-               "3. Tipos de Documento\n" +
-               "4. Tipos de Tercero\n" +
-               "5. Planes de Promoción\n" +
-               "6. Movimientos de Caja\n" +
-               "7. Compras\n" +
-               "8. Ventas\n" +
-               "9. Reportes\n" +
+               "3. Planes de Promoción\n" +
+               "4. Compras\n" +
+               "5. Ventas\n" +
                "0. Salir\n";
     }
 
@@ -73,32 +69,16 @@ internal class Program
                         GestionarTerceros();
                         break;
                     case 3:
-                        Console.WriteLine("===== TIPOS DE DOCUMENTO =====\n");
-                        GestionarTiposDocumento();
-                        break;
-                    case 4:
-                        Console.WriteLine("===== TIPOS DE TERCERO =====\n");
-                        GestionarTiposTercero();
-                        break;
-                    case 5:
                         Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
                         GestionarPlanesPromocion();
                         break;
-                    case 6:
-                        Console.WriteLine("===== MOVIMIENTOS DE CAJA =====\n");
-                        GestionarMovimientosCaja();
-                        break;
-                    case 7:
+                    case 4:
                         Console.WriteLine("===== COMPRAS =====\n");
                         GestionarCompras();
                         break;
-                    case 8:
+                    case 5:
                         Console.WriteLine("===== VENTAS =====\n");
                         GestionarVentas(); 
-                        break;
-                    case 9:
-                        Console.WriteLine("===== REPORTES =====\n");
-                        GenerarReportes();
                         break;
                     case 0:
                         Console.WriteLine("¿Está seguro que desea salir? (S/N): ");
@@ -129,22 +109,10 @@ internal class Program
     {
         Console.WriteLine("Tipos de Documento.");
     }
-    private static void GestionarTiposDocumento()
-    {
-        Console.WriteLine("Tipos de Documento.");
-    }
-    private static void GestionarTiposTercero()
-    {
-        Console.WriteLine("Planes de tipo de tercero.");
-    }
 
     private static void GestionarPlanesPromocion()
     {
         Console.WriteLine("Planes de Promoción.");
-    }
-    private static void GestionarMovimientosCaja()
-    {
-        Console.WriteLine("Movimientos de Caja.");    
     }
     private static void GestionarCompras()
     {
@@ -153,10 +121,6 @@ internal class Program
     private static void GestionarVentas()
     {
         Console.WriteLine("Movimientos de ventas.");    
-    }
-    private static void GenerarReportes()
-    {
-        Console.WriteLine("Reportes.");    
     }
 }
 
