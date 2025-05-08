@@ -99,7 +99,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
                     {
                         // Insertar tercero
                         var query = @"INSERT INTO terceros 
-                                    (nombre, apellidos, email, tipoDoc_Id, tipoTerceroId, DireccionId, empresa_ID) 
+                                    (nombre, apellidos, email, tipoDocId, tipoTerceroId, DireccionId, empresaId) 
                                     VALUES (@Nombre, @Apellidos, @Email, @TipoDocId, @TipoTerceroId, @DireccionId, @EmpresaId);
                                     SELECT LAST_INSERT_ID();";
                         
@@ -170,10 +170,10 @@ namespace SistemaGestorV.Infrastructure.Repositories
                                     nombre = @Nombre, 
                                     apellidos = @Apellidos, 
                                     email = @Email, 
-                                    tipoDoc_Id = @TipoDocId, 
+                                    tipoDocId = @TipoDocId, 
                                     tipoTerceroId = @TipoTerceroId, 
                                     DireccionId = @DireccionId, 
-                                    empresa_ID = @EmpresaId 
+                                    empresaId = @EmpresaId 
                                     WHERE Id = @Id";
                         
                         using (var command = new MySqlCommand(query, connection, transaction))

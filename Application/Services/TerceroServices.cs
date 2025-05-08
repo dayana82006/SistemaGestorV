@@ -2,6 +2,7 @@ using SistemaGestorV.Domain.Entities;
 using SistemaGestorV.Domain.Ports;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SistemaGestorV.Application.Services;
 
@@ -38,7 +39,7 @@ public class TerceroService
         _repo.Crear(tercero);
     }
 
-    public void ActualizarTercero(int id, Tercero tercero)
+    public void ActualizarTercero(Tercero tercero)
     {
         if (tercero == null)
             throw new ArgumentNullException(nameof(tercero));
@@ -48,6 +49,33 @@ public class TerceroService
 
         ValidarTercero(tercero);
         _repo.Actualizar(tercero);
+    }
+
+    public void ActualizarTercero(int id, string nuevoNombre, string nuevoCorreo, string nuevoTelefono)
+    {
+        var tercero = _repo.ObtenerPorId(id);
+        if (tercero == null)
+            throw new ArgumentException($"No se encontró un tercero con el ID {id}");
+
+        // Actualizar propiedades básicas
+        tercero.Nombre = nuevoNombre;
+        tercero.Email = nuevoCorreo;
+
+        // Actualizar o agregar teléfono
+        if (!string.IsNullOrWhiteSpace(nuevoTelefono))
+        {
+            // Si no tiene teléfonos, inicializar la lista
+            if (tercero.Telefonos == null)
+                tercero.Telefonos = new List<Telefono>();
+
+            // Si ya tiene un teléfono, actualizar el primero, sino agregar uno nuevo
+            if (tercero.Telefonos.Any())
+                tercero.Telefonos.First().Numero = nuevoTelefono;
+            else
+                tercero.Telefonos.Add(new Telefono { Numero = nuevoTelefono, Tipo = "Principal" });
+        }
+
+        ActualizarTercero(tercero);
     }
 
     public void EliminarTercero(int id)
@@ -68,7 +96,7 @@ public class TerceroService
             Console.WriteLine($"ID: {t.Id}, Nombre: {t.Nombre} {t.Apellidos}, Tipo: {t.TipoTerceroDescripcion}, Email: {t.Email}");
             
             // Mostrar teléfonos
-            if (t.Telefonos.Count > 0)
+            if (t.Telefonos?.Count > 0)
             {
                 Console.WriteLine("   Teléfonos:");
                 foreach (var tel in t.Telefonos)
@@ -116,18 +144,8 @@ public class TerceroService
         }
     }
 
-    internal void ActualizarTercero(int id, string? nuevoNombre, string? nuevoCorreo, string? nuevoTelefono)
+    public bool ExisteTerceroConId(int id)
     {
-        throw new NotImplementedException();
-    }
-
-    internal void ActualizarTercero(Tercero tercero)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal bool ExisteTerceroConId(int id)
-    {
-        throw new NotImplementedException();
+        return _repo.ObtenerPorId(id) != null;
     }
 }
