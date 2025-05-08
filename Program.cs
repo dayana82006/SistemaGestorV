@@ -41,25 +41,9 @@ internal class Program
         var uiProductos = new UIProducto(factory);
         MostrarBarraDeCarga();
 
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
-        {
-            try
-            {
-                connection.Open();
-                conexionExitosa = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(" Error al conectar a la base de datos: " + ex.Message);
-            }
-        }
-
-        if (conexionExitosa)
-   {
             bool salir = false;
             while (!salir)
             {
-                MostrarMenu();
                 Console.WriteLine(MostrarMenu());
                 Console.Write("Seleccione una opción: ");
                 int opcion = Utilidades.LeerOpcionMenuKey(MostrarMenu());
@@ -68,7 +52,6 @@ internal class Program
                 switch (opcion)
                 {
                      case 1:
-                        Console.WriteLine("===== GESTIÓN DE PRODUCTOS =====\n");
                         uiProductos.MostrarMenu();
                         break;
                     case 2:
@@ -118,7 +101,7 @@ internal class Program
                     Console.ReadKey();
                 }
             }
-        }
+        
         Console.WriteLine("Presione cualquier tecla para salir...");
         Console.ReadKey();
     }

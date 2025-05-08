@@ -17,7 +17,7 @@ namespace SistemaGestorV.Application.Services
             Console.WriteLine("\n--- Lista de Productos ---");
             foreach (var producto in productos)
             {
-                Console.WriteLine($"ID: {producto.Id}, Nombre: {producto.Nombre}, Stock: {producto.Stock}");
+                Console.WriteLine($"ID: {producto.id}, Nombre: {producto.nombre}, Stock: {producto.stock}");
             }
         }
 
@@ -44,8 +44,8 @@ namespace SistemaGestorV.Application.Services
                 return;
             }
 
-            producto.Nombre = nombre.Trim();
-            producto.Stock = stock;
+            producto.nombre = nombre.Trim();
+            producto.stock = stock;
 
             _repo.Actualizar(producto);
             Console.WriteLine($"Producto ID: {id} actualizado con éxito.");
