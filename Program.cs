@@ -36,10 +36,10 @@ internal class Program
         string connectionString = "server=localhost;database=db_sistema;user=root;password=root123;";
         IDbFactory factory = new MySqlDbFactory(connectionString);
         var uiProductos = new UIProducto(factory);
-        var uiTerceros = new UITercero(factory);
+       var uiTerceros = new UITercero(factory);
 
         MostrarBarraDeCarga();
-        EjecutarMenuPrincipal(uiTerceros);
+       EjecutarMenuPrincipal(uiTerceros);
 
         bool salir = false;
         while (!salir)

@@ -1,10 +1,11 @@
 using System;
-using MiAppHexagonal.Domain.Ports;
+using SistemaGestorV.Domain.Ports;
 
-namespace MiAppHexagonal.Domain.Factory;
+namespace SistemaGestorV.Domain.Factory;
 
 public interface IDbFactory
 {
    
-    
+  IProductoRepository CrearProductoRepository();
+
 }
