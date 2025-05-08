@@ -114,10 +114,11 @@ namespace SistemaGestorV.Application.UI.Tercero
                     return;
                 }
 
-                var tercero = new Tercero
+                var tercero = new SistemaGestorV.Domain.Entities.Tercero
                 {
                     TipoTerceroId = tipoTercero
                 };
+
 
                 // Datos básicos
                 Console.Write("\nNombre: ");

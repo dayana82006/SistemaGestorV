@@ -389,7 +389,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
         {
             try
             {
-                return new Tercero
+                Tercero tercero = new Tercero
                 {
                     Id = reader.GetInt32("Id"),
                     Nombre = reader.GetString("nombre"),
@@ -400,12 +400,15 @@ namespace SistemaGestorV.Infrastructure.Repositories
                     DireccionId = reader.GetInt32("DireccionId"),
                     EmpresaId = reader.GetString("empresa_ID")
                 };
+                return tercero;
             }
             catch
             {
                 return null;
             }
+            
         }
+
 
         private void CargarDatosEspecificos(MySqlConnection connection, Tercero tercero)
         {

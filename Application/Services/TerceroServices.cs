@@ -120,4 +120,9 @@ public class TerceroService
     {
         throw new NotImplementedException();
     }
+
+    internal void ActualizarTercero(Tercero tercero)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,5 +1,5 @@
 using SistemaGestorV.Application.Services;
-
+using SistemaGestorV;
 namespace SistemaGestorV.Application.UI.Terceros;
 
 public class ActualizarTercero
@@ -14,13 +14,10 @@ public class ActualizarTercero
         Console.Write("ID del Tercero a actualizar: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {
-            Console.Write("Nuevo nombre: ");
-            string nuevoNombre = Console.ReadLine();
-            
-            Console.Write("Correo: ");
-             string nuevoCorreo = Console.ReadLine();
-            Console.Write("Teléfono: ");
-             string nuevoTelefono = Console.ReadLine();
+            string nuevoNombre = Utilidades.LeerTextoNoVacio("Nuevo nombre:");
+            string nuevoCorreo = Utilidades.LeerTextoNoVacio("Correo:");
+            string nuevoTelefono = Utilidades.LeerTextoNoVacio("Teléfono:");
+
             _servicio.ActualizarTercero(id, nuevoNombre, nuevoCorreo, nuevoTelefono);
             Console.WriteLine("Tercero actualizado.");
         }
@@ -29,6 +26,4 @@ public class ActualizarTercero
             Console.WriteLine("ID inválido.");
         }
     }
-
-
 }
