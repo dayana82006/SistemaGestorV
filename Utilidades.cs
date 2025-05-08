@@ -1,4 +1,4 @@
-namespace menucrud;
+namespace SistemaGestorV;
 
 public class Utilidades
 {

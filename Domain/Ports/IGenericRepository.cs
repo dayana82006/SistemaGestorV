@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 
-namespace MiAppHexagonal.Domain.Ports
+namespace SistemaGestorV.Domain.Ports;
+
+public interface IGenericRepository<T>
 {
-    public interface IGenericRepository<T>
-    {
-        IEnumerable<T> ObtenerTodos(); 
-        T? ObtenerPorId(int id);       
-        void Crear(T entity);
-        void Actualizar(T entity);
-        void Eliminar(int id);
-    }
+    IEnumerable<T> ObtenerTodos();
+    T ObtenerPorId(int id);
+    void Crear(T entity);
+    void Actualizar(T entity);
+    void Eliminar(int id);
 }

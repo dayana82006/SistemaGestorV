@@ -1,10 +1,7 @@
-using System;
-using MiAppHexagonal.Domain.Ports;
-
-namespace MiAppHexagonal.Domain.Factory;
-
-public interface IDbFactory
+namespace SistemaGestorV.Domain.Ports
 {
-   
-    
+    public interface IDbFactory
+    {
+        ITerceroRepository CrearTerceroRepository();
+    }
 }

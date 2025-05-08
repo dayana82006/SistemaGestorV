@@ -1,7 +1,7 @@
 using System;
 using MySql.Data.MySqlClient;
 
-namespace MiAppHexagonal.Infrastructure.Mysql
+namespace SistemaGestorV.Infrastructure.Mysql
 {
     public class ConexionSingleton
     {

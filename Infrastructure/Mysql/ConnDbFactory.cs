@@ -1,19 +1,21 @@
 using System;
-using MiAppHexagonal.Domain.Factory;
-using MiAppHexagonal.Domain.Ports;
-//using MiAppHexagonal.Infrastructure.Repositories;
+using SistemaGestorV.Domain.Ports;
+using SistemaGestorV.Infrastructure.Repositories;
 
-namespace MiAppHexagonal.Infrastructure.Mysql;
-
+namespace SistemaGestorV.Infrastructure.Mysql
+{
     public class MySqlDbFactory : IDbFactory
     {
         private readonly string _connectionString;
 
         public MySqlDbFactory(string connectionString)
         {
-            _connectionString = connectionString;
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         }
 
-       
+        public ITerceroRepository CrearTerceroRepository()
+        {
+            return new MySqlTerceroRepository(_connectionString);
+        }
     }
-
+}
