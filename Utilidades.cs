@@ -109,38 +109,82 @@ public class Utilidades
         }
     }
 
-public static string LeerTextoNoVacio(string mensaje)
-{
-    string input;
-    do
+    public static string LeerTextoNoVacio(string mensaje)
     {
-        Console.WriteLine(mensaje);
-        input = Console.ReadLine()?.Trim() ?? string.Empty; 
-        if (string.IsNullOrEmpty(input))
+        string input;
+        do
         {
-            Console.WriteLine("El campo no puede estar vacío. Intente nuevamente.");
-        }
-    } while (string.IsNullOrEmpty(input));
+            Console.Write(mensaje);
+            input = Console.ReadLine()?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("El campo no puede estar vacío. Intente nuevamente.");
+            }
+        } while (string.IsNullOrWhiteSpace(input));
 
-    return input;
-}
+        return input;
+    }
 
-
-public static int LeerEntero(string mensaje)
-{
-    int valor;
-    bool valido;
-    do
+    public static int LeerEntero(string mensaje)
     {
-        Console.WriteLine(mensaje);
-        valido = int.TryParse(Console.ReadLine(), out valor);
-        if (!valido)
+        int valor;
+        string input;
+        do
         {
-            Console.WriteLine("Error: Ingrese un número entero válido.");
-        }
-    } while (!valido);
+            input = LeerTextoNoVacio(mensaje);
+            if (!int.TryParse(input, out valor))
+            {
+                Console.WriteLine("Debe ingresar un número entero válido.");
+            }
+        } while (!int.TryParse(input, out valor));
 
-    return valor;
-}
+        return valor;
+    }
 
+    public static double LeerDouble(string mensaje)
+    {
+        double valor;
+        string input;
+        do
+        {
+            input = LeerTextoNoVacio(mensaje);
+            if (!double.TryParse(input, out valor))
+            {
+                Console.WriteLine("Debe ingresar un número válido.");
+            }
+        } while (!double.TryParse(input, out valor));
+
+        return valor;
+    }
+
+    public static DateTime LeerFecha(string mensaje)
+    {
+        DateTime valor;
+        string input;
+        do
+        {
+            input = LeerTextoNoVacio(mensaje + " (yyyy-MM-dd): ");
+            if (!DateTime.TryParse(input, out valor))
+            {
+                Console.WriteLine("Formato de fecha inválido. Use yyyy-MM-dd.");
+            }
+        } while (!DateTime.TryParse(input, out valor));
+
+        return valor;
+    }
+
+    public static bool LeerConfirmacion(string mensaje)
+    {
+        string respuesta;
+        do
+        {
+            respuesta = LeerTextoNoVacio(mensaje + " (S/N): ").ToUpper();
+            if (respuesta != "S" && respuesta != "N")
+            {
+                Console.WriteLine("Por favor ingrese S o N.");
+            }
+        } while (respuesta != "S" && respuesta != "N");
+
+        return respuesta == "S";
+    }
 }

@@ -19,6 +19,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
         {
             var terceros = new List<Tercero>();
             
+            // Primero obtenemos todos los terceros básicos
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
@@ -36,15 +37,15 @@ namespace SistemaGestorV.Infrastructure.Repositories
                         }
                     }
                 }
-                
-                // Cargar datos específicos y teléfonos
-                foreach (var tercero in terceros)
+            }
+            
+            // Después cargamos los datos específicos y teléfonos en conexiones separadas
+            foreach (var tercero in terceros)
+            {
+                if (tercero != null)
                 {
-                    if (tercero != null)
-                    {
-                        CargarDatosEspecificos(connection, tercero);
-                        tercero.Telefonos = new List<Telefono>(ObtenerTelefonosPorTercero(tercero.Id));
-                    }
+                    CargarDatosEspecificos(tercero);
+                    tercero.Telefonos = new List<Telefono>(ObtenerTelefonosPorTercero(tercero.Id));
                 }
             }
             
@@ -53,6 +54,9 @@ namespace SistemaGestorV.Infrastructure.Repositories
 
         public Tercero? ObtenerPorId(int id)
         {
+            Tercero? tercero = null;
+            
+            // Primero obtenemos el tercero básico
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
@@ -66,19 +70,20 @@ namespace SistemaGestorV.Infrastructure.Repositories
                     {
                         if (reader.Read())
                         {
-                            var tercero = MapTerceroFromReader(reader);
-                            if (tercero != null)
-                            {
-                                CargarDatosEspecificos(connection, tercero);
-                                tercero.Telefonos = new List<Telefono>(ObtenerTelefonosPorTercero(id));
-                            }
-                            return tercero;
+                            tercero = MapTerceroFromReader(reader);
                         }
                     }
                 }
             }
             
-            return null;
+            // Si encontramos el tercero, cargamos sus datos adicionales
+            if (tercero != null)
+            {
+                CargarDatosEspecificos(tercero);
+                tercero.Telefonos = new List<Telefono>(ObtenerTelefonosPorTercero(id));
+            }
+            
+            return tercero;
         }
 
         public void Crear(Tercero tercero)
@@ -133,7 +138,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
                                 if (telefono != null)
                                 {
                                     telefono.TerceroId = tercero.Id;
-                                    AgregarTelefono(telefono);
+                                    AgregarTelefono(telefono, connection, transaction);
                                 }
                             }
                         }
@@ -200,7 +205,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
                         }
 
                         // Actualizar teléfonos (eliminar todos y volver a insertar)
-                        EliminarTelefonosPorTercero(tercero.Id);
+                        EliminarTelefonosPorTercero(tercero.Id, connection, transaction);
                         if (tercero.Telefonos != null)
                         {
                             foreach (var telefono in tercero.Telefonos)
@@ -208,7 +213,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
                                 if (telefono != null)
                                 {
                                     telefono.TerceroId = tercero.Id;
-                                    AgregarTelefono(telefono);
+                                    AgregarTelefono(telefono, connection, transaction);
                                 }
                             }
                         }
@@ -233,25 +238,34 @@ namespace SistemaGestorV.Infrastructure.Repositories
                 {
                     try
                     {
-                        // Primero eliminar teléfonos
-                        EliminarTelefonosPorTercero(id);
+                        // Primero obtener el tipo de tercero
+                        int tipoTerceroId = 0;
+                        var queryTipo = "SELECT tipoTerceroId FROM terceros WHERE Id = @Id";
+                        using (var commandTipo = new MySqlCommand(queryTipo, connection, transaction))
+                        {
+                            commandTipo.Parameters.AddWithValue("@Id", id);
+                            object result = commandTipo.ExecuteScalar();
+                            if (result != null && result != DBNull.Value)
+                            {
+                                tipoTerceroId = Convert.ToInt32(result);
+                            }
+                        }
+
+                        // Eliminar teléfonos
+                        EliminarTelefonosPorTercero(id, connection, transaction);
 
                         // Eliminar datos específicos según el tipo
-                        var tercero = ObtenerPorId(id);
-                        if (tercero != null)
+                        switch (tipoTerceroId)
                         {
-                            switch (tercero.TipoTerceroId)
-                            {
-                                case 1:
-                                    EliminarCliente(connection, transaction, id);
-                                    break;
-                                case 2:
-                                    EliminarEmpleado(connection, transaction, id);
-                                    break;
-                                case 3:
-                                    EliminarProveedor(connection, transaction, id);
-                                    break;
-                            }
+                            case 1:
+                                EliminarCliente(connection, transaction, id);
+                                break;
+                            case 2:
+                                EliminarEmpleado(connection, transaction, id);
+                                break;
+                            case 3:
+                                EliminarProveedor(connection, transaction, id);
+                                break;
                         }
 
                         // Finalmente eliminar el tercero
@@ -277,6 +291,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
         {
             var terceros = new List<Tercero>();
             
+            // Primero obtenemos los terceros básicos del tipo solicitado
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
@@ -298,15 +313,15 @@ namespace SistemaGestorV.Infrastructure.Repositories
                         }
                     }
                 }
-                
-                // Cargar datos específicos y teléfonos
-                foreach (var tercero in terceros)
+            }
+            
+            // Después cargamos los datos específicos y teléfonos en conexiones separadas
+            foreach (var tercero in terceros)
+            {
+                if (tercero != null)
                 {
-                    if (tercero != null)
-                    {
-                        CargarDatosEspecificos(connection, tercero);
-                        tercero.Telefonos = new List<Telefono>(ObtenerTelefonosPorTercero(tercero.Id));
-                    }
+                    CargarDatosEspecificos(tercero);
+                    tercero.Telefonos = new List<Telefono>(ObtenerTelefonosPorTercero(tercero.Id));
                 }
             }
             
@@ -368,6 +383,24 @@ namespace SistemaGestorV.Infrastructure.Repositories
             }
         }
 
+        private void AgregarTelefono(Telefono telefono, MySqlConnection connection, MySqlTransaction transaction)
+        {
+            if (telefono == null) throw new ArgumentNullException(nameof(telefono));
+
+            var query = @"INSERT INTO tercero_telefonos 
+                        (numero, tipo, terceroId) 
+                        VALUES (@Numero, @Tipo, @TerceroId)";
+            
+            using (var command = new MySqlCommand(query, connection, transaction))
+            {
+                command.Parameters.AddWithValue("@Numero", telefono.Numero ?? string.Empty);
+                command.Parameters.AddWithValue("@Tipo", telefono.Tipo ?? string.Empty);
+                command.Parameters.AddWithValue("@TerceroId", telefono.TerceroId);
+                
+                command.ExecuteNonQuery();
+            }
+        }
+
         public void EliminarTelefonosPorTercero(int terceroId)
         {
             using (var connection = new MySqlConnection(_connectionString))
@@ -380,6 +413,16 @@ namespace SistemaGestorV.Infrastructure.Repositories
                     command.Parameters.AddWithValue("@TerceroId", terceroId);
                     command.ExecuteNonQuery();
                 }
+            }
+        }
+
+        private void EliminarTelefonosPorTercero(int terceroId, MySqlConnection connection, MySqlTransaction transaction)
+        {
+            var query = "DELETE FROM tercero_telefonos WHERE terceroId = @TerceroId";
+            using (var command = new MySqlCommand(query, connection, transaction))
+            {
+                command.Parameters.AddWithValue("@TerceroId", terceroId);
+                command.ExecuteNonQuery();
             }
         }
 
@@ -406,96 +449,109 @@ namespace SistemaGestorV.Infrastructure.Repositories
             {
                 return null;
             }
-            
         }
 
-
-        private void CargarDatosEspecificos(MySqlConnection connection, Tercero tercero)
+        private void CargarDatosEspecificos(Tercero tercero)
         {
             if (tercero == null) return;
 
             switch (tercero.TipoTerceroId)
             {
                 case 1:
-                    tercero.Cliente = ObtenerCliente(connection, tercero.Id);
+                    tercero.Cliente = ObtenerCliente(tercero.Id);
                     break;
                 case 2:
-                    tercero.Empleado = ObtenerEmpleado(connection, tercero.Id);
+                    tercero.Empleado = ObtenerEmpleado(tercero.Id);
                     break;
                 case 3:
-                    tercero.Proveedor = ObtenerProveedor(connection, tercero.Id);
+                    tercero.Proveedor = ObtenerProveedor(tercero.Id);
                     break;
             }
         }
 
-        private Cliente? ObtenerCliente(MySqlConnection connection, int terceroId)
+        private Cliente? ObtenerCliente(int terceroId)
         {
-            var query = "SELECT * FROM Cliente WHERE terceroId = @TerceroId";
-            using (var command = new MySqlCommand(query, connection))
+            using (var connection = new MySqlConnection(_connectionString))
             {
-                command.Parameters.AddWithValue("@TerceroId", terceroId);
+                connection.Open();
                 
-                using (var reader = command.ExecuteReader())
+                var query = "SELECT * FROM Cliente WHERE terceroId = @TerceroId";
+                using (var command = new MySqlCommand(query, connection))
                 {
-                    if (reader.Read())
+                    command.Parameters.AddWithValue("@TerceroId", terceroId);
+                    
+                    using (var reader = command.ExecuteReader())
                     {
-                        return new Cliente
+                        if (reader.Read())
                         {
-                            Id = reader.GetInt32("Id"),
-                            TerceroId = terceroId,
-                            FechaNac = reader.GetDateTime("FechaNac"),
-                            FechaInforma = reader.GetDateTime("FechaInforma")
-                        };
+                            return new Cliente
+                            {
+                                Id = reader.GetInt32("Id"),
+                                TerceroId = terceroId,
+                                FechaNac = reader.GetDateTime("FechaNac"),
+                                FechaInforma = reader.GetDateTime("FechaInforma")
+                            };
+                        }
                     }
                 }
             }
             return null;
         }
 
-        private Empleado? ObtenerEmpleado(MySqlConnection connection, int terceroId)
+        private Empleado? ObtenerEmpleado(int terceroId)
         {
-            var query = "SELECT * FROM Empleado WHERE terceroId = @TerceroId";
-            using (var command = new MySqlCommand(query, connection))
+            using (var connection = new MySqlConnection(_connectionString))
             {
-                command.Parameters.AddWithValue("@TerceroId", terceroId);
+                connection.Open();
                 
-                using (var reader = command.ExecuteReader())
+                var query = "SELECT * FROM Empleado WHERE terceroId = @TerceroId";
+                using (var command = new MySqlCommand(query, connection))
                 {
-                    if (reader.Read())
+                    command.Parameters.AddWithValue("@TerceroId", terceroId);
+                    
+                    using (var reader = command.ExecuteReader())
                     {
-                        return new Empleado
+                        if (reader.Read())
                         {
-                            Id = reader.GetInt32("Id"),
-                            TerceroId = terceroId,
-                            FechaIngreso = reader.GetDateTime("FechaIngreso"),
-                            SalarioBase = reader.GetDouble("SalarioBase"),
-                            EpsId = reader.GetInt32("epsId"),
-                            ArlId = reader.GetInt32("arlId")
-                        };
+                            return new Empleado
+                            {
+                                Id = reader.GetInt32("Id"),
+                                TerceroId = terceroId,
+                                FechaIngreso = reader.GetDateTime("FechaIngreso"),
+                                SalarioBase = reader.GetDouble("SalarioBase"),
+                                EpsId = reader.GetInt32("epsId"),
+                                ArlId = reader.GetInt32("arlId")
+                            };
+                        }
                     }
                 }
             }
             return null;
         }
 
-        private Proveedor? ObtenerProveedor(MySqlConnection connection, int terceroId)
+        private Proveedor? ObtenerProveedor(int terceroId)
         {
-            var query = "SELECT * FROM Proveedor WHERE terceroId = @TerceroId";
-            using (var command = new MySqlCommand(query, connection))
+            using (var connection = new MySqlConnection(_connectionString))
             {
-                command.Parameters.AddWithValue("@TerceroId", terceroId);
+                connection.Open();
                 
-                using (var reader = command.ExecuteReader())
+                var query = "SELECT * FROM Proveedor WHERE terceroId = @TerceroId";
+                using (var command = new MySqlCommand(query, connection))
                 {
-                    if (reader.Read())
+                    command.Parameters.AddWithValue("@TerceroId", terceroId);
+                    
+                    using (var reader = command.ExecuteReader())
                     {
-                        return new Proveedor
+                        if (reader.Read())
                         {
-                            Id = reader.GetInt32("Id"),
-                            TerceroId = terceroId,
-                            Scto = reader.GetDouble("Scto"),
-                            DiaPago = reader.GetInt32("DiaPago")
-                        };
+                            return new Proveedor
+                            {
+                                Id = reader.GetInt32("Id"),
+                                TerceroId = terceroId,
+                                Scto = reader.GetDouble("Scto"),
+                                DiaPago = reader.GetInt32("DiaPago")
+                            };
+                        }
                     }
                 }
             }

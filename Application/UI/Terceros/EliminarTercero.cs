@@ -14,7 +14,7 @@ public class EliminarTercero
 
     public void Ejecutar()
     {
-
+        Console.Clear();
         Console.Write("ID del Tercero a eliminar: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {

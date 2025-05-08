@@ -125,4 +125,9 @@ public class TerceroService
     {
         throw new NotImplementedException();
     }
+
+    internal bool ExisteTerceroConId(int id)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -11,6 +11,7 @@ public class ActualizarTercero
     }
     public void Ejecutar()
     {
+        Console.Clear();
         Console.Write("ID del Tercero a actualizar: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {
