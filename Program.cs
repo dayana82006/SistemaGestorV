@@ -2,6 +2,11 @@ using System;
 using System.Threading;
 using MySql.Data.MySqlClient; // ✅ Importar para MySQL
 using menucrud;
+using SistemaGestorV.Domain.Factory;
+using SistemaGestorV.Infrastructure.Mysql;
+using SistemaGestorV.Application.UI.Producto;
+using SistemaGestorV.Application.UI.Tercero;
+
 internal class Program
 {
     private static void MostrarBarraDeCarga()
@@ -29,98 +34,59 @@ internal class Program
     private static void Main(string[] args)
     {
         string connectionString = "server=localhost;database=db_sistema;user=root;password=root123;";
-        bool conexionExitosa = false;
+        IDbFactory factory = new MySqlDbFactory(connectionString);
+        var uiProductos = new UIProducto(factory);
+        var uiTerceros = new UITercero(factory);
 
         MostrarBarraDeCarga();
+        EjecutarMenuPrincipal(uiTerceros);
 
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        bool salir = false;
+        while (!salir)
         {
-            try
+            Console.WriteLine(MostrarMenu());
+            Console.Write("Seleccione una opción: ");
+            int opcion = Utilidades.LeerOpcionMenuKey(MostrarMenu());
+            Console.WriteLine();
+
+            switch (opcion)
             {
-                connection.Open();
-                Console.WriteLine("✅ Conexión exitosa a la base de datos.");
-                conexionExitosa = true;
+                case 1:
+                    uiProductos.MostrarMenu();
+                    break;
+                case 2:
+                   Console.WriteLine("===== GESTIÓN DE TERCEROS =====");
+                    uiTerceros.GestionarTerceros();
+                    break;
+                case 3:
+                    Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
+                    break;
+                case 4:
+
+                    Console.WriteLine("===== COMPRAS =====\n");
+
+                    break;
+                case 5:
+                    Console.WriteLine("===== VENTAS =====\n");
+                    break;
+
+                case 0:
+                    Console.WriteLine("¿Está seguro que desea salir? (S/N): ");
+                    salir = Utilidades.LeerTecla();
+                    break;
+                default:
+                    Console.WriteLine("Opción no válida.");
+                    break;
             }
-            catch (Exception ex)
+
+            if (!salir)
             {
-                Console.WriteLine("❌ Error al conectar a la base de datos: " + ex.Message);
-            }
-        }
-
-        if (conexionExitosa)
-   {
-            bool salir = false;
-            while (!salir)
-            {
-                MostrarMenu();
-                Console.WriteLine(MostrarMenu());
-                Console.Write("Seleccione una opción: ");
-                int opcion = Utilidades.LeerOpcionMenuKey(MostrarMenu());
-                Console.WriteLine(); 
-
-                switch (opcion)
-                {
-                     case 1:
-                        Console.WriteLine("===== GESTIÓN DE PRODUCTOS =====\n");
-                        GestionarProductos();
-                        break;
-                    case 2:
-                        Console.WriteLine("===== GESTIÓN DE TERCEROS =====\n");
-                        GestionarTerceros();
-                        break;
-                    case 3:
-                        Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
-                        GestionarPlanesPromocion();
-                        break;
-                    case 4:
-                        Console.WriteLine("===== COMPRAS =====\n");
-                        GestionarCompras();
-                        break;
-                    case 5:
-                        Console.WriteLine("===== VENTAS =====\n");
-                        GestionarVentas(); 
-                        break;
-                    case 0:
-                        Console.WriteLine("¿Está seguro que desea salir? (S/N): ");
-                        salir = Utilidades.LeerTecla(); 
-                        break;
-                    default:
-                        Console.WriteLine("Opción no válida.");
-                        break;
-                }
-
-                if (!salir)
-                {
-                    Console.WriteLine("\nPresione cualquier tecla para continuar...");
-                    Console.ReadKey();
-                }
+                Console.WriteLine("\nPresione cualquier tecla para continuar...");
+                Console.ReadKey();
             }
         }
+
         Console.WriteLine("Presione cualquier tecla para salir...");
         Console.ReadKey();
     }
-
-    private static void GestionarProductos()
-    {
-         Console.WriteLine("Gestión de Productos.");
-    }
-
-    private static void  GestionarTerceros()
-    {
-        Console.WriteLine("Tipos de Documento.");
-    }
-
-    private static void GestionarPlanesPromocion()
-    {
-        Console.WriteLine("Planes de Promoción.");
-    }
-    private static void GestionarCompras()
-    {
-        Console.WriteLine("Gestionar compras.");    
-    }
-    private static void GestionarVentas()
-    {
-        Console.WriteLine("Movimientos de ventas.");    
-    }
 }
-
