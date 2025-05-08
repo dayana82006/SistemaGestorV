@@ -8,6 +8,7 @@ public class Utilidades
         {
             ConsoleKeyInfo tecla = Console.ReadKey(intercept: true);
             char opcion = char.ToUpper(tecla.KeyChar);
+
             switch (opcion)
             {
                 case 'S':
@@ -24,44 +25,37 @@ public class Utilidades
     public static int LeerOpcionMenuKey(string menu)
     {
         string opcionMenu = string.Empty;
-        
-        while(true)
+
+        while (true)
         {
             ConsoleKeyInfo tecla = Console.ReadKey(intercept: true);
-            
-         
-            if(tecla.Key == ConsoleKey.Enter)
+
+            if (tecla.Key == ConsoleKey.Enter)
             {
                 if (!string.IsNullOrEmpty(opcionMenu))
                 {
-                    int opcion = int.Parse(opcionMenu);
-                    return opcion;
+                    if (int.TryParse(opcionMenu, out int opcion))
+                        return opcion;
                 }
+
                 continue;
             }
-            
-      
-            if(tecla.Key == ConsoleKey.Backspace)
+
+            if (tecla.Key == ConsoleKey.Backspace && opcionMenu.Length > 0)
             {
-                if (opcionMenu.Length > 0)
-                {
-                   
-                    opcionMenu = opcionMenu.Substring(0, opcionMenu.Length - 1);
-                    
-                   
-                    Console.Write("\b \b");
-                }
+                opcionMenu = opcionMenu.Substring(0, opcionMenu.Length - 1);
+                Console.Write("\b \b");
                 continue;
             }
-            
-            if(char.IsDigit(tecla.KeyChar))
+
+            if (char.IsDigit(tecla.KeyChar))
             {
                 opcionMenu += tecla.KeyChar;
                 Console.Write(tecla.KeyChar);
             }
             else
             {
-                Console.Beep(); 
+                Console.Beep();
             }
         }
     }
@@ -73,14 +67,15 @@ public class Utilidades
             try
             {
                 Console.Write("\nSeleccione una opción: ");
-                string opcion = Console.ReadLine() ?? string.Empty;
-                if (int.Parse(opcion) >= 1)
+                string input = Console.ReadLine() ?? "";
+
+                if (int.TryParse(input, out int opcion) && opcion >= 0)
                 {
-                    return int.Parse(opcion);
+                    return opcion;
                 }
                 else
                 {
-                    Console.Write("\nOpción no válida");
+                    Console.WriteLine("Opción no válida");
                     Console.ReadKey();
                     Console.Clear();
                     Console.WriteLine(menu);
@@ -88,7 +83,7 @@ public class Utilidades
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error: {ex.Message}");
                 Console.ReadKey();
             }
         }
@@ -97,7 +92,8 @@ public class Utilidades
     public static int LeerEntero()
     {
         ConsoleKeyInfo tecla = Console.ReadKey(intercept: true);
-        if(char.IsDigit(tecla.KeyChar))
+
+        if (char.IsDigit(tecla.KeyChar))
         {
             Console.Write(tecla.KeyChar);
             return (int)char.GetNumericValue(tecla.KeyChar);
@@ -109,38 +105,41 @@ public class Utilidades
         }
     }
 
-public static string LeerTextoNoVacio(string mensaje)
-{
-    string input;
-    do
+    public static string LeerTextoNoVacio(string mensaje)
     {
-        Console.WriteLine(mensaje);
-        input = Console.ReadLine()?.Trim() ?? string.Empty; 
-        if (string.IsNullOrEmpty(input))
+        string input;
+        do
         {
-            Console.WriteLine("El campo no puede estar vacío. Intente nuevamente.");
-        }
-    } while (string.IsNullOrEmpty(input));
+            Console.WriteLine(mensaje);
+            input = Console.ReadLine()?.Trim() ?? "";
 
-    return input;
-}
+            if (string.IsNullOrEmpty(input))
+            {
+                Console.WriteLine("El campo no puede estar vacío. Intente nuevamente.");
+            }
 
+        } while (string.IsNullOrEmpty(input));
 
-public static int LeerEntero(string mensaje)
-{
-    int valor;
-    bool valido;
-    do
+        return input;
+    }
+
+    public static int LeerEntero(string mensaje)
     {
-        Console.WriteLine(mensaje);
-        valido = int.TryParse(Console.ReadLine(), out valor);
-        if (!valido)
+        int valor;
+        bool valido;
+
+        do
         {
-            Console.WriteLine("Error: Ingrese un número entero válido.");
-        }
-    } while (!valido);
+            Console.WriteLine(mensaje);
+            valido = int.TryParse(Console.ReadLine(), out valor);
 
-    return valor;
-}
+            if (!valido)
+            {
+                Console.WriteLine("Error: Ingrese un número entero válido.");
+            }
 
+        } while (!valido);
+
+        return valor;
+    }
 }
