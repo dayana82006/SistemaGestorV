@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1mlqnDRt2gU=",
+  "dgSpecHash": "c3D8IW9aoKw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\merli\\Downloads\\SGI\\SistemaGestorV\\SistemaGestorV.csproj",
+  "projectFilePath": "C:\\Users\\merli\\Downloads\\SistemaGI\\SistemaGestorV\\SistemaGestorV.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\merli\\.nuget\\packages\\bouncycastle.cryptography\\2.5.1\\bouncycastle.cryptography.2.5.1.nupkg.sha512",
     "C:\\Users\\merli\\.nuget\\packages\\google.protobuf\\3.30.0\\google.protobuf.3.30.0.nupkg.sha512",

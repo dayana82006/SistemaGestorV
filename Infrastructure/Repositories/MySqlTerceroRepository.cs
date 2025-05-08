@@ -94,7 +94,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
                     {
                         // Insertar tercero
                         var query = @"INSERT INTO terceros 
-                                    (nombre, apellidos, email, tipoDoc_Id, tipoTercero_Id, DireccionId, empresa_ID) 
+                                    (nombre, apellidos, email, tipoDoc_Id, tipoTerceroId, DireccionId, empresa_ID) 
                                     VALUES (@Nombre, @Apellidos, @Email, @TipoDocId, @TipoTerceroId, @DireccionId, @EmpresaId);
                                     SELECT LAST_INSERT_ID();";
                         
@@ -166,7 +166,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
                                     apellidos = @Apellidos, 
                                     email = @Email, 
                                     tipoDoc_Id = @TipoDocId, 
-                                    tipoTercero_Id = @TipoTerceroId, 
+                                    tipoTerceroId = @TipoTerceroId, 
                                     DireccionId = @DireccionId, 
                                     empresa_ID = @EmpresaId 
                                     WHERE Id = @Id";
@@ -281,7 +281,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
             {
                 connection.Open();
                 
-                var query = "SELECT * FROM terceros WHERE tipoTercero_Id = @TipoTerceroId";
+                var query = "SELECT * FROM terceros WHERE tipoTerceroId = @TipoTerceroId";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@TipoTerceroId", tipoTerceroId);
@@ -321,7 +321,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
             {
                 connection.Open();
                 
-                var query = "SELECT * FROM tercero_telefonos WHERE tercero_id = @TerceroId";
+                var query = "SELECT * FROM tercero_telefonos WHERE terceroId = @TerceroId";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@TerceroId", terceroId);
@@ -332,7 +332,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
                         {
                             telefonos.Add(new Telefono
                             {
-                                Id = reader.GetInt32("Id"),
+                                Id = reader.GetInt32("id"),
                                 Numero = reader.GetString("numero"),
                                 Tipo = reader.GetString("tipo"),
                                 TerceroId = terceroId
@@ -354,7 +354,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
                 connection.Open();
                 
                 var query = @"INSERT INTO tercero_telefonos 
-                            (numero, tipo, tercero_id) 
+                            (numero, tipo, terceroId) 
                             VALUES (@Numero, @Tipo, @TerceroId)";
                 
                 using (var command = new MySqlCommand(query, connection))
@@ -374,7 +374,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
             {
                 connection.Open();
                 
-                var query = "DELETE FROM tercero_telefonos WHERE tercero_id = @TerceroId";
+                var query = "DELETE FROM tercero_telefonos WHERE terceroId = @TerceroId";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@TerceroId", terceroId);
@@ -391,14 +391,14 @@ namespace SistemaGestorV.Infrastructure.Repositories
             {
                 Tercero tercero = new Tercero
                 {
-                    Id = reader.GetInt32("Id"),
+                    Id = reader.GetInt32("id"),
                     Nombre = reader.GetString("nombre"),
                     Apellidos = reader.GetString("apellidos"),
                     Email = reader.GetString("email"),
-                    TipoDocumentoId = reader.GetInt32("tipoDoc_Id"),
-                    TipoTerceroId = reader.GetInt32("tipoTercero_Id"),
+                    TipoDocumentoId = reader.GetInt32("tipoDocId"),
+                    TipoTerceroId = reader.GetInt32("tipoTerceroId"),
                     DireccionId = reader.GetInt32("DireccionId"),
-                    EmpresaId = reader.GetString("empresa_ID")
+                    EmpresaId = reader.GetString("empresaId")
                 };
                 return tercero;
             }
@@ -430,7 +430,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
 
         private Cliente? ObtenerCliente(MySqlConnection connection, int terceroId)
         {
-            var query = "SELECT * FROM Cliente WHERE Tercero_Id = @TerceroId";
+            var query = "SELECT * FROM Cliente WHERE terceroId = @TerceroId";
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@TerceroId", terceroId);
@@ -454,7 +454,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
 
         private Empleado? ObtenerEmpleado(MySqlConnection connection, int terceroId)
         {
-            var query = "SELECT * FROM Empleado WHERE Tercero_Id = @TerceroId";
+            var query = "SELECT * FROM Empleado WHERE terceroId = @TerceroId";
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@TerceroId", terceroId);
@@ -469,8 +469,8 @@ namespace SistemaGestorV.Infrastructure.Repositories
                             TerceroId = terceroId,
                             FechaIngreso = reader.GetDateTime("FechaIngreso"),
                             SalarioBase = reader.GetDouble("SalarioBase"),
-                            EpsId = reader.GetInt32("Eps_Id"),
-                            ArlId = reader.GetInt32("Arl_Id")
+                            EpsId = reader.GetInt32("epsId"),
+                            ArlId = reader.GetInt32("arlId")
                         };
                     }
                 }
@@ -480,7 +480,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
 
         private Proveedor? ObtenerProveedor(MySqlConnection connection, int terceroId)
         {
-            var query = "SELECT * FROM Proveedor WHERE Tercero_Id = @TerceroId";
+            var query = "SELECT * FROM Proveedor WHERE terceroId = @TerceroId";
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@TerceroId", terceroId);
@@ -507,7 +507,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
             if (tercero.Cliente == null) return;
 
             var query = @"INSERT INTO Cliente 
-                        (Tercero_Id, FechaNac, FechaInforma) 
+                        (terceroId, FechaNac, FechaInforma) 
                         VALUES (@TerceroId, @FechaNac, @FechaInforma);
                         SELECT LAST_INSERT_ID();";
             
@@ -526,7 +526,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
             if (tercero.Empleado == null) return;
 
             var query = @"INSERT INTO Empleado 
-                        (Tercero_Id, FechaIngreso, SalarioBase, Eps_Id, Arl_Id) 
+                        (terceroId, FechaIngreso, SalarioBase, epsId, arlId) 
                         VALUES (@TerceroId, @FechaIngreso, @SalarioBase, @EpsId, @ArlId);
                         SELECT LAST_INSERT_ID();";
             
@@ -547,7 +547,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
             if (tercero.Proveedor == null) return;
 
             var query = @"INSERT INTO Proveedor 
-                        (Tercero_Id, Scto, DiaPago) 
+                        (terceroId, Scto, DiaPago) 
                         VALUES (@TerceroId, @Scto, @DiaPago);
                         SELECT LAST_INSERT_ID();";
             
@@ -568,7 +568,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
             var query = @"UPDATE Cliente SET 
                         FechaNac = @FechaNac, 
                         FechaInforma = @FechaInforma 
-                        WHERE Tercero_Id = @TerceroId";
+                        WHERE terceroId = @TerceroId";
             
             using (var command = new MySqlCommand(query, connection, transaction))
             {
@@ -587,9 +587,9 @@ namespace SistemaGestorV.Infrastructure.Repositories
             var query = @"UPDATE Empleado SET 
                         FechaIngreso = @FechaIngreso, 
                         SalarioBase = @SalarioBase, 
-                        Eps_Id = @EpsId, 
-                        Arl_Id = @ArlId 
-                        WHERE Tercero_Id = @TerceroId";
+                        epsId = @EpsId, 
+                        arlId = @ArlId 
+                        WHERE terceroId = @TerceroId";
             
             using (var command = new MySqlCommand(query, connection, transaction))
             {
@@ -610,7 +610,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
             var query = @"UPDATE Proveedor SET 
                         Scto = @Scto, 
                         DiaPago = @DiaPago 
-                        WHERE Tercero_Id = @TerceroId";
+                        WHERE terceroId = @TerceroId";
             
             using (var command = new MySqlCommand(query, connection, transaction))
             {
@@ -624,7 +624,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
 
         private void EliminarCliente(MySqlConnection connection, MySqlTransaction transaction, int terceroId)
         {
-            var query = "DELETE FROM Cliente WHERE Tercero_Id = @TerceroId";
+            var query = "DELETE FROM Cliente WHERE terceroId = @TerceroId";
             using (var command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@TerceroId", terceroId);
@@ -634,7 +634,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
 
         private void EliminarEmpleado(MySqlConnection connection, MySqlTransaction transaction, int terceroId)
         {
-            var query = "DELETE FROM Empleado WHERE Tercero_Id = @TerceroId";
+            var query = "DELETE FROM Empleado WHERE terceroId = @TerceroId";
             using (var command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@TerceroId", terceroId);
@@ -644,7 +644,7 @@ namespace SistemaGestorV.Infrastructure.Repositories
 
         private void EliminarProveedor(MySqlConnection connection, MySqlTransaction transaction, int terceroId)
         {
-            var query = "DELETE FROM Proveedor WHERE Tercero_Id = @TerceroId";
+            var query = "DELETE FROM Proveedor WHERE terceroId = @TerceroId";
             using (var command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@TerceroId", terceroId);

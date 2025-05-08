@@ -1614,11 +1614,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\merli\\Downloads\\SGI\\SistemaGestorV\\SistemaGestorV.csproj",
+      "projectUniqueName": "C:\\Users\\merli\\Downloads\\SistemaGI\\SistemaGestorV\\SistemaGestorV.csproj",
       "projectName": "SistemaGestorV",
-      "projectPath": "C:\\Users\\merli\\Downloads\\SGI\\SistemaGestorV\\SistemaGestorV.csproj",
+      "projectPath": "C:\\Users\\merli\\Downloads\\SistemaGI\\SistemaGestorV\\SistemaGestorV.csproj",
       "packagesPath": "C:\\Users\\merli\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\merli\\Downloads\\SGI\\SistemaGestorV\\obj\\",
+      "outputPath": "C:\\Users\\merli\\Downloads\\SistemaGI\\SistemaGestorV\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\merli\\AppData\\Roaming\\NuGet\\NuGet.Config"
