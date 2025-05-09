@@ -1,11 +1,8 @@
-using System;
-using System.Threading;
-using MySql.Data.MySqlClient; // ✅ Importar para MySQL
-using menucrud;
-using SistemaGestorV.Domain.Factory;
 using SistemaGestorV.Infrastructure.Mysql;
 using SistemaGestorV.Application.UI.Producto;
 using SistemaGestorV.Application.UI.Tercero;
+using SistemaGestorV;
+using SistemaGestorV.Domain.Ports;
 
 internal class Program
 {
@@ -23,6 +20,8 @@ internal class Program
     private static string MostrarMenu()
     {
         return "========= MENÚ PRINCIPAL =========\n\n" +
+       "DEBUG: Código actualizado se está ejecutando"+
+
                "1. Gestión de Productos\n" +
                "2. Gestión de Terceros\n" +
                "3. Planes de Promoción\n" +
@@ -36,17 +35,16 @@ internal class Program
         string connectionString = "server=localhost;database=db_sistema;user=root;password=root123;";
         IDbFactory factory = new MySqlDbFactory(connectionString);
         var uiProductos = new UIProducto(factory);
-       var uiTerceros = new UITercero(factory);
+        var uiTerceros = new UITercero(factory);
 
         MostrarBarraDeCarga();
-       EjecutarMenuPrincipal(uiTerceros);
 
         bool salir = false;
         while (!salir)
         {
             Console.WriteLine(MostrarMenu());
             Console.Write("Seleccione una opción: ");
-            int opcion = Utilidades.LeerOpcionMenuKey(MostrarMenu());
+            int opcion = SistemaGestorV.Utilidades.LeerOpcionMenuKey(MostrarMenu());
             Console.WriteLine();
 
             switch (opcion)
@@ -55,21 +53,17 @@ internal class Program
                     uiProductos.MostrarMenu();
                     break;
                 case 2:
-                   Console.WriteLine("===== GESTIÓN DE TERCEROS =====");
                     uiTerceros.GestionarTerceros();
                     break;
                 case 3:
                     Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
                     break;
                 case 4:
-
                     Console.WriteLine("===== COMPRAS =====\n");
-
                     break;
                 case 5:
                     Console.WriteLine("===== VENTAS =====\n");
                     break;
-
                 case 0:
                     Console.WriteLine("¿Está seguro que desea salir? (S/N): ");
                     salir = Utilidades.LeerTecla();

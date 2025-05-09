@@ -121,3 +121,9 @@ C:\Users\merli\Downloads\SistemaGI\SistemaGestorV\obj\Debug\net8.0\refint\Sistem
 C:\Users\merli\Downloads\SistemaGI\SistemaGestorV\obj\Debug\net8.0\SistemaGestorV.pdb
 C:\Users\merli\Downloads\SistemaGI\SistemaGestorV\obj\Debug\net8.0\SistemaGestorV.genruntimeconfig.cache
 C:\Users\merli\Downloads\SistemaGI\SistemaGestorV\obj\Debug\net8.0\ref\SistemaGestorV.dll
+C:\Users\merli\Downloads\SGIDEF\SistemaGestorV\obj\Debug\net8.0\SistemaGestorV.csproj.AssemblyReference.cache
+C:\Users\merli\Downloads\SGIDEF\SistemaGestorV\obj\Debug\net8.0\SistemaGestorV.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\merli\Downloads\SGIDEF\SistemaGestorV\obj\Debug\net8.0\SistemaGestorV.AssemblyInfoInputs.cache
+C:\Users\merli\Downloads\SGIDEF\SistemaGestorV\obj\Debug\net8.0\SistemaGestorV.AssemblyInfo.cs
+C:\Users\merli\Downloads\SGIDEF\SistemaGestorV\obj\Debug\net8.0\SistemaGestorV.csproj.CoreCompileInputs.cache
+C:\Users\merli\Downloads\SGIDEF\SistemaGestorV\obj\Debug\net8.0\SistemaGestorV.sourcelink.json
