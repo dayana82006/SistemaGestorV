@@ -1609,19 +1609,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\merli\\.nuget\\packages\\": {}
+    "C:\\Users\\Dayana\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\merli\\Downloads\\SGIDEF\\SistemaGestorV\\SistemaGestorV.csproj",
+      "projectUniqueName": "C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\SistemaGestorV.csproj",
       "projectName": "SistemaGestorV",
-      "projectPath": "C:\\Users\\merli\\Downloads\\SGIDEF\\SistemaGestorV\\SistemaGestorV.csproj",
-      "packagesPath": "C:\\Users\\merli\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\merli\\Downloads\\SGIDEF\\SistemaGestorV\\obj\\",
+      "projectPath": "C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\SistemaGestorV.csproj",
+      "packagesPath": "C:\\Users\\Dayana\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\merli\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Dayana\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1674,13 +1674,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\merli\\Downloads\\SGIDEF\\SistemaGestorV\\obj\\project.nuget.cache : Unexpected character encountered while parsing value: <. Path '', line 0, position 0."
-    }
-  ]
+  }
 }

@@ -8,18 +8,10 @@ namespace SistemaGestorV.Application.UI.Producto;
 public class UIProducto
 {
     private readonly ProductoService _servicio;
-    private IDbFactory factory;
-
-
     public UIProducto(IDbFactory factory)
     {
 
         _servicio = new ProductoService(factory.CrearProductoRepository());
-    }
-
-    public UIProducto(IDbFactory factory)
-    {
-        this.factory = factory;
     }
 
 

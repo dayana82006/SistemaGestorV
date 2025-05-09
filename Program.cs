@@ -1,8 +1,9 @@
 using SistemaGestorV.Infrastructure.Mysql;
+using SistemaGestorV.Domain.Factory;
 using SistemaGestorV.Application.UI.Producto;
 using SistemaGestorV.Application.UI.Tercero;
 using SistemaGestorV;
-using SistemaGestorV.Domain.Ports;
+
 
 internal class Program
 {
@@ -20,8 +21,6 @@ internal class Program
     private static string MostrarMenu()
     {
         return "========= MENÚ PRINCIPAL =========\n\n" +
-       "DEBUG: Código actualizado se está ejecutando"+
-
                "1. Gestión de Productos\n" +
                "2. Gestión de Terceros\n" +
                "3. Planes de Promoción\n" +

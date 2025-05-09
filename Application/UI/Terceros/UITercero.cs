@@ -1,5 +1,6 @@
 using SistemaGestorV.Application.Services;
 using SistemaGestorV.Domain.Entities;
+using SistemaGestorV.Domain.Factory;
 using SistemaGestorV.Domain.Ports;
 
 namespace SistemaGestorV.Application.UI.Tercero
@@ -8,11 +9,10 @@ namespace SistemaGestorV.Application.UI.Tercero
     {
         private readonly TerceroService _servicio;
 
+        public IDbFactory Factory { get; }
+
         public UITercero(IDbFactory factory)
         {
-            if (factory == null)
-                throw new ArgumentNullException(nameof(factory));
-
             _servicio = new TerceroService(factory.CrearTerceroRepository());
         }
 

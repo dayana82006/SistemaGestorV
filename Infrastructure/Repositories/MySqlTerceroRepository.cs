@@ -1,12 +1,17 @@
 using MySql.Data.MySqlClient;
 using SistemaGestorV.Domain.Entities;
 using SistemaGestorV.Domain.Ports;
+using SistemaGestorV.Infrastructure.Mysql;
+using SistemaGestorV.Infrastructure.Repositories;
+using System.Collections.Generic;
+using MySql.Data.MySqlClient;   
+
 using System;
 using System.Collections.Generic;
 
 namespace SistemaGestorV.Infrastructure.Repositories
 {
-    public class MySqlTerceroRepository : ITerceroRepository
+    public class MySqlTerceroRepository :  ITerceroRepository
     {
         private readonly string _connectionString;
 

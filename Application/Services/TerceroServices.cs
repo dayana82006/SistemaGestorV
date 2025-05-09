@@ -1,8 +1,6 @@
 using SistemaGestorV.Domain.Entities;
 using SistemaGestorV.Domain.Ports;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SistemaGestorV.Application.Services;
 
