@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace SistemaGestorV;
 
-namespace menucrud;
 public class Utilidades
 {
     public static bool LeerTecla()
@@ -13,7 +8,6 @@ public class Utilidades
         {
             ConsoleKeyInfo tecla = Console.ReadKey(intercept: true);
             char opcion = char.ToUpper(tecla.KeyChar);
-
             switch (opcion)
             {
                 case 'S':
@@ -30,37 +24,44 @@ public class Utilidades
     public static int LeerOpcionMenuKey(string menu)
     {
         string opcionMenu = string.Empty;
-
-        while (true)
+        
+        while(true)
         {
             ConsoleKeyInfo tecla = Console.ReadKey(intercept: true);
-
-            if (tecla.Key == ConsoleKey.Enter)
+            
+         
+            if(tecla.Key == ConsoleKey.Enter)
             {
                 if (!string.IsNullOrEmpty(opcionMenu))
                 {
-                    if (int.TryParse(opcionMenu, out int opcion))
-                        return opcion;
+                    int opcion = int.Parse(opcionMenu);
+                    return opcion;
                 }
-
                 continue;
             }
-
-            if (tecla.Key == ConsoleKey.Backspace && opcionMenu.Length > 0)
+            
+      
+            if(tecla.Key == ConsoleKey.Backspace)
             {
-                opcionMenu = opcionMenu.Substring(0, opcionMenu.Length - 1);
-                Console.Write("\b \b");
+                if (opcionMenu.Length > 0)
+                {
+                   
+                    opcionMenu = opcionMenu.Substring(0, opcionMenu.Length - 1);
+                    
+                   
+                    Console.Write("\b \b");
+                }
                 continue;
             }
-
-            if (char.IsDigit(tecla.KeyChar))
+            
+            if(char.IsDigit(tecla.KeyChar))
             {
                 opcionMenu += tecla.KeyChar;
                 Console.Write(tecla.KeyChar);
             }
             else
             {
-                Console.Beep();
+                Console.Beep(); 
             }
         }
     }
@@ -72,15 +73,14 @@ public class Utilidades
             try
             {
                 Console.Write("\nSeleccione una opción: ");
-                string input = Console.ReadLine() ?? "";
-
-                if (int.TryParse(input, out int opcion) && opcion >= 0)
+                string opcion = Console.ReadLine() ?? string.Empty;
+                if (int.Parse(opcion) >= 1)
                 {
-                    return opcion;
+                    return int.Parse(opcion);
                 }
                 else
                 {
-                    Console.WriteLine("Opción no válida");
+                    Console.Write("\nOpción no válida");
                     Console.ReadKey();
                     Console.Clear();
                     Console.WriteLine(menu);
@@ -88,7 +88,7 @@ public class Utilidades
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine(ex.Message);
                 Console.ReadKey();
             }
         }
@@ -97,8 +97,7 @@ public class Utilidades
     public static int LeerEntero()
     {
         ConsoleKeyInfo tecla = Console.ReadKey(intercept: true);
-
-        if (char.IsDigit(tecla.KeyChar))
+        if(char.IsDigit(tecla.KeyChar))
         {
             Console.Write(tecla.KeyChar);
             return (int)char.GetNumericValue(tecla.KeyChar);
@@ -115,15 +114,13 @@ public class Utilidades
         string input;
         do
         {
-            Console.WriteLine(mensaje);
-            input = Console.ReadLine()?.Trim() ?? "";
-
-            if (string.IsNullOrEmpty(input))
+            Console.Write(mensaje);
+            input = Console.ReadLine()?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("El campo no puede estar vacío. Intente nuevamente.");
             }
-
-        } while (string.IsNullOrEmpty(input));
+        } while (string.IsNullOrWhiteSpace(input));
 
         return input;
     }
@@ -131,20 +128,63 @@ public class Utilidades
     public static int LeerEntero(string mensaje)
     {
         int valor;
-        bool valido;
-
+        string input;
         do
         {
-            Console.WriteLine(mensaje);
-            valido = int.TryParse(Console.ReadLine(), out valor);
-
-            if (!valido)
+            input = LeerTextoNoVacio(mensaje);
+            if (!int.TryParse(input, out valor))
             {
-                Console.WriteLine("Error: Ingrese un número entero válido.");
+                Console.WriteLine("Debe ingresar un número entero válido.");
             }
-
-        } while (!valido);
+        } while (!int.TryParse(input, out valor));
 
         return valor;
+    }
+
+    public static double LeerDouble(string mensaje)
+    {
+        double valor;
+        string input;
+        do
+        {
+            input = LeerTextoNoVacio(mensaje);
+            if (!double.TryParse(input, out valor))
+            {
+                Console.WriteLine("Debe ingresar un número válido.");
+            }
+        } while (!double.TryParse(input, out valor));
+
+        return valor;
+    }
+
+    public static DateTime LeerFecha(string mensaje)
+    {
+        DateTime valor;
+        string input;
+        do
+        {
+            input = LeerTextoNoVacio(mensaje + " (yyyy-MM-dd): ");
+            if (!DateTime.TryParse(input, out valor))
+            {
+                Console.WriteLine("Formato de fecha inválido. Use yyyy-MM-dd.");
+            }
+        } while (!DateTime.TryParse(input, out valor));
+
+        return valor;
+    }
+
+    public static bool LeerConfirmacion(string mensaje)
+    {
+        string respuesta;
+        do
+        {
+            respuesta = LeerTextoNoVacio(mensaje + " (S/N): ").ToUpper();
+            if (respuesta != "S" && respuesta != "N")
+            {
+                Console.WriteLine("Por favor ingrese S o N.");
+            }
+        } while (respuesta != "S" && respuesta != "N");
+
+        return respuesta == "S";
     }
 }
