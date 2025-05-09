@@ -1,127 +1,92 @@
-using MySql.Data.MySqlClient;
+using System;
+using System.Threading;
+using MySql.Data.MySqlClient; // ✅ Importar para MySQL
+using menucrud;
+using SistemaGestorV.Domain.Factory;
+using SistemaGestorV.Infrastructure.Mysql;
+using SistemaGestorV.Application.UI.Producto;
 using SistemaGestorV.Application.UI.Tercero;
-using SistemaGestorV.Infrastructure.Factory;
 
-namespace SistemaGestorV
+internal class Program
 {
-    class Program
+    private static void MostrarBarraDeCarga()
     {
-        static void Main(string[] args)
+        Console.Write("Cargando: ");
+        for (int i = 0; i <= 20; i++)
         {
-            try
+            Console.Write("■");
+            Thread.Sleep(100);
+        }
+        Console.WriteLine("\n");
+    }
+
+    private static string MostrarMenu()
+    {
+        return "========= MENÚ PRINCIPAL =========\n\n" +
+               "1. Gestión de Productos\n" +
+               "2. Gestión de Terceros\n" +
+               "3. Planes de Promoción\n" +
+               "4. Compras\n" +
+               "5. Ventas\n" +
+               "0. Salir\n";
+    }
+
+    private static void Main(string[] args)
+    {
+        string connectionString = "server=localhost;database=db_sistema;user=root;password=root123;";
+        IDbFactory factory = new MySqlDbFactory(connectionString);
+        var uiProductos = new UIProducto(factory);
+       var uiTerceros = new UITercero(factory);
+
+        MostrarBarraDeCarga();
+       EjecutarMenuPrincipal(uiTerceros);
+
+        bool salir = false;
+        while (!salir)
+        {
+            Console.WriteLine(MostrarMenu());
+            Console.Write("Seleccione una opción: ");
+            int opcion = Utilidades.LeerOpcionMenuKey(MostrarMenu());
+            Console.WriteLine();
+
+            switch (opcion)
             {
-                string connectionString = "server=localhost;database=db_sistema;user=root;password=root123;";
+                case 1:
+                    uiProductos.MostrarMenu();
+                    break;
+                case 2:
+                   Console.WriteLine("===== GESTIÓN DE TERCEROS =====");
+                    uiTerceros.GestionarTerceros();
+                    break;
+                case 3:
+                    Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
+                    break;
+                case 4:
 
-                MostrarBarraDeCarga();
+                    Console.WriteLine("===== COMPRAS =====\n");
 
-                if (!VerificarConexion(connectionString))
-                {
-                    Console.WriteLine("\nNo se pudo establecer conexión con la base de datos.");
-                    Console.WriteLine("Presione cualquier tecla para salir...");
-                    Console.ReadKey();
-                    return;
-                }
+                    break;
+                case 5:
+                    Console.WriteLine("===== VENTAS =====\n");
+                    break;
 
-                var factory = new MySqlDbFactory(connectionString);
-                var uiTerceros = new UITercero(factory);
-
-                EjecutarMenuPrincipal(uiTerceros);
+                case 0:
+                    Console.WriteLine("¿Está seguro que desea salir? (S/N): ");
+                    salir = Utilidades.LeerTecla();
+                    break;
+                default:
+                    Console.WriteLine("Opción no válida.");
+                    break;
             }
-            catch (Exception ex)
+
+            if (!salir)
             {
-                Console.WriteLine($"\n❌ Error crítico: {ex.Message}");
-                Console.WriteLine("Presione cualquier tecla para salir...");
+                Console.WriteLine("\nPresione cualquier tecla para continuar...");
                 Console.ReadKey();
             }
         }
 
-        private static void MostrarBarraDeCarga()
-        {
-            Console.Write("Cargando: ");
-            for (int i = 0; i <= 20; i++)
-            {
-                Console.Write("■");
-                Thread.Sleep(100);
-            }
-            Console.WriteLine("\n");
-        }
-
-        private static bool VerificarConexion(string connectionString)
-        {
-            try
-            {
-                using var connection = new MySqlConnection(connectionString);
-                connection.Open();
-                Console.WriteLine("✅ Conexión exitosa a la base de datos");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Error de conexión: {ex.Message}");
-                return false;
-            }
-        }
-
-        private static void EjecutarMenuPrincipal(UITercero uiTerceros)
-        {
-            bool salir = false;
-            while (!salir)
-            {
-                Console.Clear();
-                MostrarMenuPrincipal();
-                
-                var opcion = Console.ReadLine();
-                Console.WriteLine();
-
-                switch (opcion)
-                {
-                    case "1":
-                        Console.WriteLine("===== GESTIÓN DE PRODUCTOS =====");
-                        //GestionarProductos();
-                        break;
-                    case "2":
-                        Console.WriteLine("===== GESTIÓN DE TERCEROS =====");
-                        uiTerceros.GestionarTerceros();
-                        break;
-                    case "3":
-                        Console.WriteLine("===== PLANES DE PROMOCIÓN =====");
-                        //GestionarPlanesPromocion();
-                        break;
-                    case "4":
-                        Console.WriteLine("===== COMPRAS =====");
-                        //GestionarCompras();
-                        break;
-                    case "5":
-                        Console.WriteLine("===== VENTAS =====");
-                        //GestionarVentas();
-                        break;
-                    case "0":
-                        Console.Write("¿Está seguro que desea salir? (S/N): ");
-                        salir = Console.ReadLine()?.ToUpper() == "S";
-                        break;
-                    default:
-                        Console.WriteLine("Opción no válida");
-                        break;
-                }
-
-                if (!salir)
-                {
-                    Console.WriteLine("\nPresione cualquier tecla para continuar...");
-                    Console.ReadKey();
-                }
-            }
-        }
-
-        private static void MostrarMenuPrincipal()
-        {
-            Console.WriteLine("========= MENÚ PRINCIPAL =========");
-            Console.WriteLine("1. Gestión de Productos");
-            Console.WriteLine("2. Gestión de Terceros");
-            Console.WriteLine("3. Planes de Promoción");
-            Console.WriteLine("4. Compras");
-            Console.WriteLine("5. Ventas");
-            Console.WriteLine("0. Salir");
-            Console.Write("Seleccione una opción: ");
-        }
+        Console.WriteLine("Presione cualquier tecla para salir...");
+        Console.ReadKey();
     }
 }
