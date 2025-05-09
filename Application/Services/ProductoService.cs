@@ -11,6 +11,12 @@ namespace SistemaGestorV.Application.Services
         {
             _repo = repo;
         }
+
+        public ProductoService()
+        {
+        }
+
+
         public void MostrarTodos()
         {
             var productos = _repo.ObtenerTodos();
@@ -65,5 +71,11 @@ namespace SistemaGestorV.Application.Services
             _repo.Eliminar(id);
             Console.WriteLine($"Producto ID: {id} eliminado con éxito.");
         }
+
+        public IEnumerable<Producto> ObtenerTodos()
+        {
+            return _repo.ObtenerTodos();
+        }
+
     }
 }

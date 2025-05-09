@@ -1,9 +1,7 @@
 using System;
-using SistemaGestorV.Domain.Factory;
 using SistemaGestorV.Domain.Ports;
 using SistemaGestorV.Infrastructure.Repositories;
-using SistemaGestorV.Infrastructure.Mysql;
-using MySql.Data.MySqlClient;
+using SistemaGestorV.Domain.Factory;
 
 
 namespace SistemaGestorV.Infrastructure.Mysql;
@@ -24,6 +22,10 @@ namespace SistemaGestorV.Infrastructure.Mysql;
         public ITerceroRepository CrearTerceroRepository()
         {
             return new MySqlTerceroRepository(_connectionString);
+        }
+        public IPlanesRepository CrearPlanesRepository()
+        {
+            return new MySqlPlanesRepository(_connectionString);
         }
 }
 
