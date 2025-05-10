@@ -93,23 +93,25 @@ namespace SistemaGestorV.Application.UI
                     throw new ArgumentException("El porcentaje de descuento debe estar entre 0 y 100.");
                 }
                 
-                // Mostrar lista de productos para actualizar
+                // Obtener productos disponibles
                 var productos = _planServices.ObtenerProductos();
                 var productosSeleccionados = new List<string>();
                 
                 if (productos != null && productos.Count > 0)
                 {
-                    Console.WriteLine("\nSeleccione los nuevos productos para este plan (ingrese los números separados por comas):");
-                    Console.WriteLine("Nota: Esto reemplazará todos los productos actualmente asociados.");
-                    
-                    for (int i = 0; i < productos.Count; i++)
+                    // Mostrar productos disponibles
+                    Console.WriteLine("\nProductos disponibles:");
+                    foreach (var producto in productos)
                     {
                         var estaSeleccionado = planActual.ProductosAsociados != null && 
-                                              planActual.ProductosAsociados.Any(p => p == productos[i].nombre);
-                        Console.WriteLine($"{i + 1}. [{(estaSeleccionado ? "X" : " ")}] {productos[i].nombre}");
+                                              planActual.ProductosAsociados.Any(p => p == producto.nombre);
+                        Console.WriteLine($"ID: {producto.id} - Nombre: {producto.nombre} {(estaSeleccionado ? "[Ya seleccionado]" : "")}");
                     }
                     
-                    productosSeleccionados = SolicitarProductos(productos);
+                    // Solicitar productos uno por uno
+                    Console.WriteLine("\nSelección de productos - Se agregarán uno por uno");
+                    Console.WriteLine("NOTA: Esto reemplazará todos los productos actualmente asociados al plan.");
+                    productosSeleccionados = SolicitarProductosUnoAUno(productos);
                 }
                 else
                 {
@@ -123,7 +125,8 @@ namespace SistemaGestorV.Application.UI
                     return;
                 }
                 
-                _planServices.ActualizarPlan(planActual.Id, planActual.Nombre, planActual.FechaInicio, planActual.FechaFin, planActual.dcto);
+                // Actualizar plan con nuevos productos
+                _planServices.ActualizarPlan(planActual.Id, planActual.Nombre, planActual.FechaInicio, planActual.FechaFin, planActual.dcto, productosSeleccionados);
                 Console.WriteLine("\nPlan actualizado exitosamente!");
             }
             catch (Exception ex)
@@ -201,6 +204,7 @@ namespace SistemaGestorV.Application.UI
             
             return texto;
         }
+        
         private DateTime SolicitarFecha(string mensaje, string mensajeError)
         {
             DateTime fecha;
@@ -265,69 +269,49 @@ namespace SistemaGestorV.Application.UI
             return respuesta == "S";
         }
 
-        private List<string> SolicitarProductos(List<SistemaGestorV.Domain.Entities.Producto> productos)
+        private List<string> SolicitarProductosUnoAUno(List<SistemaGestorV.Domain.Entities.Producto> productos)
         {
             var productosSeleccionados = new List<string>();
-            bool seleccionValida = false;
+            bool continuarAgregando = true;
             
-            while (!seleccionValida)
+            while (continuarAgregando)
             {
-                Console.Write("\nSelección: ");
-                var seleccion = Console.ReadLine();
+                Console.Write("\nIngrese el ID del producto a agregar: ");
+                var idProducto = Console.ReadLine()?.Trim();
                 
-                if (string.IsNullOrWhiteSpace(seleccion))
+                if (string.IsNullOrWhiteSpace(idProducto))
                 {
-                    Console.WriteLine("No se ha seleccionado ningún producto.");
-                    if (ConfirmarOperacion("¿Desea continuar sin seleccionar productos? (S/N): "))
+                    Console.WriteLine("ID de producto no válido.");
+                    continue;
+                }
+                
+                var productoEncontrado = productos.FirstOrDefault(p => p.id != null && p.id.ToString() == idProducto);
+                
+                if (productoEncontrado == null)
+                {
+                    Console.WriteLine($"El producto con ID '{idProducto}' no existe. Debe registrar primero el producto con ese ID.");
+                    
+                    if (!ConfirmarOperacion("¿Desea agregar otro producto? (S/N): "))
                     {
-                        seleccionValida = true;
+                        continuarAgregando = false;
                     }
+                    continue;
+                }
+                
+                if (productosSeleccionados.Contains(productoEncontrado.nombre))
+                {
+                    Console.WriteLine($"El producto '{productoEncontrado.nombre}' ya está seleccionado.");
                 }
                 else
                 {
-                    try
-                    {
-                        var indices = seleccion.Split(',')
-                            .Select(s => s.Trim())
-                            .Where(s => !string.IsNullOrWhiteSpace(s))
-                            .ToList();
-                            
-                        bool todosNumerosValidos = true;
-                        List<int> indicesNumericos = new List<int>();
-                        
-                        foreach (var indice in indices)
-                        {
-                            if (int.TryParse(indice, out int indiceNumerico))
-                            {
-                                if (indiceNumerico > 0 && indiceNumerico <= productos.Count)
-                                {
-                                    indicesNumericos.Add(indiceNumerico - 1);
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"El índice {indiceNumerico} está fuera de rango. Debe estar entre 1 y {productos.Count}.");
-                                    todosNumerosValidos = false;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine($"'{indice}' no es un número válido.");
-                                todosNumerosValidos = false;
-                                break;
-                            }
-                        }
-                        
-                        if (todosNumerosValidos)
-                        {
-                            productosSeleccionados = indicesNumericos.Select(i => productos[i].nombre).ToList(); 
-                            seleccionValida = true;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error al procesar la selección: {ex.Message}");
-                    }
+                    
+                    productosSeleccionados.Add(productoEncontrado.nombre);
+                    Console.WriteLine($"Producto '{productoEncontrado.nombre}' agregado correctamente.");
+                }
+                
+                if (!ConfirmarOperacion("¿Desea agregar otro producto? (S/N): "))
+                {
+                    continuarAgregando = false;
                 }
             }
             

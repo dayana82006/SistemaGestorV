@@ -11,13 +11,13 @@ namespace SistemaGestorV.Domain.Entities
         public DateTime FechaFin { get; set; }
         public double dcto { get; set; }
         public List<string> ProductosAsociados { get; set; } = new List<string>();
-
+        
         public bool EsValido()
         {
             if (string.IsNullOrWhiteSpace(Nombre))
                 return false;
-            
-            if (dcto <= 0 || dcto > 100)
+                
+            if (dcto < 0 || dcto > 100)
                 return false;
                 
             if (FechaInicio >= FechaFin)

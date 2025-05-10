@@ -47,14 +47,16 @@ namespace SistemaGestorV.Application.UI
                 
                 if (productos != null && productos.Count > 0)
                 {
-                    Console.WriteLine("\nSeleccione los productos para este plan (ingrese los números separados por comas):");
-                    
-                    for (int i = 0; i < productos.Count; i++)
+                    // Mostrar productos disponibles
+                    Console.WriteLine("\nProductos disponibles:");
+                    foreach (var producto in productos)
                     {
-                        Console.WriteLine($"{i + 1}. {productos[i].nombre}");
+                        Console.WriteLine($"ID: {producto.id} - Nombre: {producto.nombre}");
                     }
                     
-                    productosSeleccionados = SolicitarProductos(productos);
+                    // Solicitar productos uno por uno
+                    Console.WriteLine("\nSelección de productos - Se agregarán uno por uno");
+                    productosSeleccionados = SolicitarProductosUnoAUno(productos);
                 }
                 else
                 {
@@ -69,7 +71,6 @@ namespace SistemaGestorV.Application.UI
                 }
                 
                 _planServices.CrearPlan(plan, productosSeleccionados);
-                Console.WriteLine("\nPlan creado exitosamente!");
             }
             catch (Exception ex)
             {
@@ -79,7 +80,6 @@ namespace SistemaGestorV.Application.UI
             Console.WriteLine("\nPresione cualquier tecla para continuar...");
             Console.ReadKey();
         }
-
         
         private string SolicitarTexto(string mensaje, string mensajeError)
         {
@@ -162,69 +162,53 @@ namespace SistemaGestorV.Application.UI
             return respuesta == "S";
         }
 
-        private List<string> SolicitarProductos(List<SistemaGestorV.Domain.Entities.Producto> productos)        
+        private List<string> SolicitarProductosUnoAUno(List<SistemaGestorV.Domain.Entities.Producto> productos)
         {
             var productosSeleccionados = new List<string>();
-            bool seleccionValida = false;
+            bool continuarAgregando = true;
             
-            while (!seleccionValida)
+            while (continuarAgregando)
             {
-                Console.Write("\nSelección: ");
-                var seleccion = Console.ReadLine();
+                Console.Write("\nIngrese el ID del producto a agregar: ");
+                var idProducto = Console.ReadLine()?.Trim();
                 
-                if (string.IsNullOrWhiteSpace(seleccion))
+                if (string.IsNullOrWhiteSpace(idProducto))
                 {
-                    Console.WriteLine("No se ha seleccionado ningún producto.");
-                    if (ConfirmarOperacion("¿Desea continuar sin seleccionar productos? (S/N): "))
+                    Console.WriteLine("ID de producto no válido.");
+                    continue;
+                }
+                
+                // Buscar producto comparando el id como string para evitar conversiones
+                var productoEncontrado = productos.FirstOrDefault(p => p.id != null && p.id.ToString() == idProducto);
+                
+                if (productoEncontrado == null)
+                {
+                    Console.WriteLine($"El producto con ID '{idProducto}' no existe. Debe registrar primero el producto con ese ID.");
+                    
+                    // Preguntar si desea continuar agregando productos
+                    if (!ConfirmarOperacion("¿Desea agregar otro producto? (S/N): "))
                     {
-                        seleccionValida = true;
+                        continuarAgregando = false;
                     }
+                    continue;
+                }
+                
+                // Verificar si el producto ya está seleccionado
+                if (productosSeleccionados.Contains(productoEncontrado.nombre))
+                {
+                    Console.WriteLine($"El producto '{productoEncontrado.nombre}' ya está seleccionado.");
                 }
                 else
                 {
-                    try
-                    {
-                        var indices = seleccion.Split(',')
-                            .Select(s => s.Trim())
-                            .Where(s => !string.IsNullOrWhiteSpace(s))
-                            .ToList();
-                            
-                        bool todosNumerosValidos = true;
-                        List<int> indicesNumericos = new List<int>();
-                        
-                        foreach (var indice in indices)
-                        {
-                            if (int.TryParse(indice, out int indiceNumerico))
-                            {
-                                if (indiceNumerico > 0 && indiceNumerico <= productos.Count)
-                                {
-                                    indicesNumericos.Add(indiceNumerico - 1);
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"El índice {indiceNumerico} está fuera de rango. Debe estar entre 1 y {productos.Count}.");
-                                    todosNumerosValidos = false;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine($"'{indice}' no es un número válido.");
-                                todosNumerosValidos = false;
-                                break;
-                            }
-                        }
-                        
-                        if (todosNumerosValidos)
-                        {
-                            productosSeleccionados = indicesNumericos.Select(i => productos[i].nombre).ToList();
-                            seleccionValida = true;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error al procesar la selección: {ex.Message}");
-                    }
+                    // Agregar el nombre del producto, no el ID
+                    productosSeleccionados.Add(productoEncontrado.nombre);
+                    Console.WriteLine($"Producto '{productoEncontrado.nombre}' agregado correctamente.");
+                }
+                
+                // Preguntar si desea continuar agregando productos
+                if (!ConfirmarOperacion("¿Desea agregar otro producto? (S/N): "))
+                {
+                    continuarAgregando = false;
                 }
             }
             

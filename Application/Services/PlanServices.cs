@@ -66,8 +66,27 @@ public class PlanServices
     {
         try
         {
-            plan.ProductosAsociados = productosAsociados;
+            try
+            {
+                plan.ProductosAsociados = productosAsociados.Select(p =>
+                {
+                    if (int.TryParse(p, out int productId))
+                    {
+                        return productId.ToString(); 
+                    }
+                    else
+                    {
+                        throw new FormatException($"The input string '{p}' was not in a correct format.");
+                    }
+                }).ToList();
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"\nError al guardar productos asociados al plan {plan.Id}: {ex.Message}");
+                return;
+            }
             _repo.Crear(plan);
+            Console.WriteLine("Plan creado exitosamente!");
         }
         catch (Exception ex)
         {
@@ -97,6 +116,40 @@ public class PlanServices
             plan.FechaInicio = fechaInicio;
             plan.FechaFin = fechaFin;
             plan.dcto = dcto;
+
+            _repo.Actualizar(plan);
+            Console.WriteLine($"Plan ID: {id} actualizado con éxito.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nError al actualizar el plan: {ex.Message}");
+        }
+    }
+
+    public void ActualizarPlan(int id, string nombre, DateTime fechaInicio, DateTime fechaFin, double dcto, List<string> productosAsociados)
+    {
+        try
+        {
+            var plan = _repo.ObtenerPorId(id);
+
+            if (plan == null)
+            {
+                Console.WriteLine("Plan no encontrado.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(nombre) || fechaInicio == default || fechaFin == default || dcto < 0)
+            {
+                Console.WriteLine("Datos inválidos para actualizar el plan.");
+                return;
+            }
+
+            plan.Nombre = nombre.Trim();
+            plan.FechaInicio = fechaInicio;
+            plan.FechaFin = fechaFin;
+            plan.dcto = dcto;
+            
+            plan.ProductosAsociados = productosAsociados;
 
             _repo.Actualizar(plan);
             Console.WriteLine($"Plan ID: {id} actualizado con éxito.");
@@ -150,7 +203,7 @@ public class PlanServices
         catch (Exception ex)
         {
             Console.WriteLine($"\nError al obtener productos: {ex.Message}");
-            return new List<SistemaGestorV.Domain.Entities.Producto>(); // Retornar lista vacía en caso de error
+            return new List<SistemaGestorV.Domain.Entities.Producto>(); 
         }
     }
 }
