@@ -55,7 +55,7 @@ namespace SistemaGestorV.Application.UI
                 Console.WriteLine($"Nombre: {planAEliminar.Nombre}");
                 Console.WriteLine($"Fecha Inicio: {planAEliminar.FechaInicio:dd/MM/yyyy}");
                 Console.WriteLine($"Fecha Fin: {planAEliminar.FechaFin:dd/MM/yyyy}");
-                Console.WriteLine($"Descuento: {planAEliminar.Descuento}%");
+                Console.WriteLine($"Descuento: {planAEliminar.dcto}%");
                 Console.WriteLine("Productos asociados:");
                 
                 if (planAEliminar.ProductosAsociados != null && planAEliminar.ProductosAsociados.Any())
@@ -77,7 +77,7 @@ namespace SistemaGestorV.Application.UI
                     return;
                 }
                 
-                _planServices.EliminarPlan(planId.ToString());
+                _planServices.EliminarPlan(planId);
                 Console.WriteLine("\nPlan eliminado exitosamente!");
             }
             catch (Exception ex)

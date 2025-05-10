@@ -84,7 +84,7 @@ namespace SistemaGestorV.Application.UI
                         Console.WriteLine($"Nombre: {plan.Nombre}");
                         Console.WriteLine($"Fecha Inicio: {plan.FechaInicio:dd/MM/yyyy}");
                         Console.WriteLine($"Fecha Fin: {plan.FechaFin:dd/MM/yyyy}");
-                        Console.WriteLine($"Descuento: {plan.Descuento}%");
+                        Console.WriteLine($"Descuento: {plan.dcto}%");
                         Console.WriteLine("Productos asociados:");
                         
                         if (plan.ProductosAsociados != null && plan.ProductosAsociados.Any())

@@ -55,7 +55,7 @@ namespace SistemaGestorV.Application.UI
                 Console.WriteLine($"Nombre: {planActual.Nombre}");
                 Console.WriteLine($"Fecha Inicio: {planActual.FechaInicio:dd/MM/yyyy}");
                 Console.WriteLine($"Fecha Fin: {planActual.FechaFin:dd/MM/yyyy}");
-                Console.WriteLine($"Descuento: {planActual.Descuento}%");
+                Console.WriteLine($"Descuento: {planActual.dcto}%");
                 Console.WriteLine("Productos asociados:");
                 
                 if (planActual.ProductosAsociados != null && planActual.ProductosAsociados.Any())
@@ -79,7 +79,7 @@ namespace SistemaGestorV.Application.UI
                 
                 planActual.FechaFin = SolicitarFechaOpcional($"Fecha de fin [{planActual.FechaFin:dd/MM/yyyy}]: ", planActual.FechaFin);
                 
-                planActual.Descuento = SolicitarNumeroDecimalOpcional($"Porcentaje de descuento [{planActual.Descuento}]: ", planActual.Descuento);
+                planActual.dcto = SolicitarNumeroDecimalOpcional($"Porcentaje de descuento [{planActual.dcto}]: ", planActual.dcto);
                 
                 // Validar fechas
                 if (planActual.FechaInicio >= planActual.FechaFin)
@@ -88,7 +88,7 @@ namespace SistemaGestorV.Application.UI
                 }
                 
                 // Validar descuento
-                if (planActual.Descuento < 0 || planActual.Descuento > 100)
+                if (planActual.dcto < 0 || planActual.dcto > 100)
                 {
                     throw new ArgumentException("El porcentaje de descuento debe estar entre 0 y 100.");
                 }
@@ -123,7 +123,7 @@ namespace SistemaGestorV.Application.UI
                     return;
                 }
                 
-                _planServices.ActualizarPlan(planActual.Id, planActual.Nombre, planActual.FechaInicio, planActual.FechaFin, planActual.Descuento);
+                _planServices.ActualizarPlan(planActual.Id, planActual.Nombre, planActual.FechaInicio, planActual.FechaFin, planActual.dcto);
                 Console.WriteLine("\nPlan actualizado exitosamente!");
             }
             catch (Exception ex)

@@ -35,9 +35,9 @@ namespace SistemaGestorV.Application.UI
                     throw new ArgumentException("La fecha de inicio debe ser anterior a la fecha de fin.");
                 }
                 
-                plan.Descuento = SolicitarNumeroDecimal("Porcentaje de descuento: ", "El descuento debe ser un número válido.");
+                plan.dcto = SolicitarNumeroDecimal("Porcentaje de descuento: ", "El descuento debe ser un número válido.");
                 
-                if (plan.Descuento < 0 || plan.Descuento > 100)
+                if (plan.dcto < 0 || plan.dcto > 100)
                 {
                     throw new ArgumentException("El porcentaje de descuento debe estar entre 0 y 100.");
                 }

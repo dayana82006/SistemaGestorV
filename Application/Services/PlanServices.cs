@@ -1,3 +1,5 @@
+// Actualización para PlanServices.cs
+
 using SistemaGestorV.Application.Services;
 using SistemaGestorV.Domain.Entities;
 using SistemaGestorV.Domain.Ports;
@@ -18,81 +20,139 @@ public class PlanServices
 
     public void MostrarTodos()
     {
-        var planes = _repo.ObtenerTodos();
-        Console.WriteLine("\n--- Lista de Planes ---");
-        foreach (var plan in planes)
+        try
         {
-            Console.WriteLine($"ID: {plan.Id}, Nombre: {plan.Nombre}, Fecha Inicio: {plan.FechaInicio}, Fecha Fin: {plan.FechaFin}, Descuento: {plan.Descuento}");
+            var planes = _repo.ObtenerTodos();
+            Console.WriteLine("\n--- Lista de Planes ---");
+            foreach (var plan in planes)
+            {
+                Console.WriteLine($"ID: {plan.Id}, Nombre: {plan.Nombre}, Fecha Inicio: {plan.FechaInicio}, Fecha Fin: {plan.FechaFin}, Descuento: {plan.dcto}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nError al obtener todos los planes: {ex.Message}");
         }
     }
 
     public void MostrarProductosDisponibles()
     {
-        var productos = _productoService.ObtenerTodos();
-        Console.WriteLine("\n--- Productos Disponibles para Planes ---");
-        foreach (var producto in productos)
+        try
         {
-            Console.WriteLine($"ID: {producto.id}, Nombre: {producto.nombre}, Stock: {producto.stock}");
+            var productos = _productoService.ObtenerTodos();
+            Console.WriteLine("\n--- Productos Disponibles para Planes ---");
+            foreach (var producto in productos)
+            {
+                Console.WriteLine($"ID: {producto.id}, Nombre: {producto.nombre}, Stock: {producto.stock}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nError al obtener productos disponibles: {ex.Message}");
         }
     }
 
     public void CrearPlan(Plan plan)
     {
-        _repo.Crear(plan);
+        try
+        {
+            _repo.Crear(plan);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nError al crear el plan: {ex.Message}");
+        }
     }
 
     public void CrearPlan(Plan plan, List<string> productosAsociados)
     {
-        plan.ProductosAsociados = productosAsociados;
-        _repo.Crear(plan);
+        try
+        {
+            plan.ProductosAsociados = productosAsociados;
+            _repo.Crear(plan);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nError al crear el plan con productos asociados: {ex.Message}");
+        }
     }
 
-    public void ActualizarPlan(int id, string nombre, DateTime fechaInicio, DateTime fechaFin, double descuento)
+    public void ActualizarPlan(int id, string nombre, DateTime fechaInicio, DateTime fechaFin, double dcto)
     {
-        var plan = _repo.ObtenerPorId(id.ToString());
-
-        if (plan == null)
+        try
         {
-            Console.WriteLine("Plan no encontrado.");
-            return;
-        }
+            var plan = _repo.ObtenerPorId(id);
 
-        if (string.IsNullOrWhiteSpace(nombre) || fechaInicio == default || fechaFin == default || descuento < 0)
+            if (plan == null)
+            {
+                Console.WriteLine("Plan no encontrado.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(nombre) || fechaInicio == default || fechaFin == default || dcto < 0)
+            {
+                Console.WriteLine("Datos inválidos para actualizar el plan.");
+                return;
+            }
+
+            plan.Nombre = nombre.Trim();
+            plan.FechaInicio = fechaInicio;
+            plan.FechaFin = fechaFin;
+            plan.dcto = dcto;
+
+            _repo.Actualizar(plan);
+            Console.WriteLine($"Plan ID: {id} actualizado con éxito.");
+        }
+        catch (Exception ex)
         {
-            Console.WriteLine("Datos inválidos para actualizar el plan.");
-            return;
+            Console.WriteLine($"\nError al actualizar el plan: {ex.Message}");
         }
-
-        plan.Nombre = nombre.Trim();
-        plan.FechaInicio = fechaInicio;
-        plan.FechaFin = fechaFin;
-        plan.Descuento = descuento;
-
-        _repo.Actualizar(plan);
-        Console.WriteLine($"Plan ID: {id} actualizado con éxito.");
     }
 
-    public void EliminarPlan(string id)
+    public void EliminarPlan(int id)
     {
-        var plan = _repo.ObtenerPorId(id);
-
-        if (plan == null)
+        try
         {
-            Console.WriteLine("Plan no encontrado.");
-            return;
-        }
+            var plan = _repo.ObtenerPorId(id);
 
-        _repo.Eliminar(id);
-        Console.WriteLine($"Plan ID: {id} eliminado con éxito.");
+            if (plan == null)
+            {
+                Console.WriteLine("Plan no encontrado.");
+                return;
+            }
+
+            _repo.Eliminar(id);
+            Console.WriteLine($"Plan ID: {id} eliminado con éxito.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nError al eliminar el plan: {ex.Message}");
+        }
     }
 
     public IEnumerable<Plan> ObtenerPlanes()
     {
-        return _repo.ObtenerTodos();
+        try
+        {
+            return _repo.ObtenerTodos();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nError al obtener todos los planes: {ex.Message}");
+            return new List<Plan>(); // Retornar lista vacía en caso de error
+        }
     }
     
-    public List<Producto> ObtenerProductos()
+    public List<SistemaGestorV.Domain.Entities.Producto> ObtenerProductos()
     {
-        return _productoService.ObtenerTodos().ToList();
+        try
+        {
+            return _productoService.ObtenerTodos().ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nError al obtener productos: {ex.Message}");
+            return new List<SistemaGestorV.Domain.Entities.Producto>(); // Retornar lista vacía en caso de error
+        }
     }
 }
