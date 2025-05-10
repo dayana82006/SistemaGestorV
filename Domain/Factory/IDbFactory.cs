@@ -10,5 +10,7 @@ public interface IDbFactory
 {
     ITerceroRepository CrearTerceroRepository();
     IProductoRepository CrearProductoRepository();
+    ICompraRepository CrearCompraRepository();
+    IDetalleCompraRepository CrearDetalleCompraRepository();
     
 }

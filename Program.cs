@@ -2,7 +2,9 @@ using SistemaGestorV.Infrastructure.Mysql;
 using SistemaGestorV.Domain.Factory;
 using SistemaGestorV.Application.UI.Producto;
 using SistemaGestorV.Application.UI.Tercero;
+
 using SistemaGestorV;
+using SistemaGestorV.Application.UI.Compras;
 
 
 internal class Program
@@ -35,6 +37,7 @@ internal class Program
         IDbFactory factory = new MySqlDbFactory(connectionString);
         var uiProductos = new UIProducto(factory);
         var uiTerceros = new UITercero(factory);
+        var uiCompras = new UICompra(factory);
 
         MostrarBarraDeCarga();
 
@@ -55,10 +58,10 @@ internal class Program
                     uiTerceros.GestionarTerceros();
                     break;
                 case 3:
-                    Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
+                   Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
                     break;
                 case 4:
-                    Console.WriteLine("===== COMPRAS =====\n");
+                    uiCompras.MostrarMenu();
                     break;
                 case 5:
                     Console.WriteLine("===== VENTAS =====\n");

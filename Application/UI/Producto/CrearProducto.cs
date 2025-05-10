@@ -58,8 +58,8 @@ namespace SistemaGestorV.Application.UI.Producto
             producto.stock = stock;
             producto.stockMin = stockMin;
             producto.stockMax = stockMax;
-            producto.createdAt = DateTime.Now;
-            producto.updatedAt = DateTime.Now;
+            producto.createdAt = DateTime.Now.Date;
+            producto.updatedAt = DateTime.Now.Date;
             producto.barcode = producto.barcode;
 
             _servicio.CrearProducto(producto);
