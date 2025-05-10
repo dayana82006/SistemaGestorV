@@ -11,14 +11,21 @@ namespace SistemaGestorV.Application.Services
         {
             _repo = repo;
         }
+
+        public ProductoService()
+        {
+        }
+
+
         public void MostrarTodos()
         {
             var productos = _repo.ObtenerTodos();
             Console.WriteLine("\n--- Lista de Productos ---");
             foreach (var producto in productos)
             {
-                Console.WriteLine($"ID: {producto.id}, Nombre: {producto.nombre}, Stock: {producto.stock}");
+                Console.WriteLine($" 🧾 ID: {producto.id}, Nombre: {producto.nombre}, Stock: {producto.stock}");
             }
+            Console.WriteLine(new string('-', 60));
         }
 
         // Crea un nuevo producto
@@ -65,5 +72,11 @@ namespace SistemaGestorV.Application.Services
             _repo.Eliminar(id);
             Console.WriteLine($"Producto ID: {id} eliminado con éxito.");
         }
+
+        public IEnumerable<Producto> ObtenerTodos()
+        {
+            return _repo.ObtenerTodos();
+        }
+
     }
 }

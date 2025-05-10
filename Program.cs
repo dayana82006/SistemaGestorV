@@ -2,8 +2,11 @@ using SistemaGestorV.Infrastructure.Mysql;
 using SistemaGestorV.Domain.Factory;
 using SistemaGestorV.Application.UI.Producto;
 using SistemaGestorV.Application.UI.Tercero;
+
 using SistemaGestorV;
 
+using SistemaGestorV.Application.UI;
+using SistemaGestorV.Application.UI.Compras;
 
 internal class Program
 {
@@ -36,6 +39,11 @@ internal class Program
         var uiProductos = new UIProducto(factory);
         var uiTerceros = new UITercero(factory);
 
+        var uiPlanes = new UIPlanes(factory);
+        
+
+        var uiCompras = new UICompra(factory);
+
         MostrarBarraDeCarga();
 
         bool salir = false;
@@ -55,10 +63,12 @@ internal class Program
                     uiTerceros.GestionarTerceros();
                     break;
                 case 3:
-                    Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
+                    uiPlanes.GestionarPlanes();
+                   Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
+
                     break;
                 case 4:
-                    Console.WriteLine("===== COMPRAS =====\n");
+                    uiCompras.MostrarMenu();
                     break;
                 case 5:
                     Console.WriteLine("===== VENTAS =====\n");
