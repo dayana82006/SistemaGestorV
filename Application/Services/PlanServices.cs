@@ -1,5 +1,3 @@
-// Actualización para PlanServices.cs
-
 using SistemaGestorV.Application.Services;
 using SistemaGestorV.Domain.Entities;
 using SistemaGestorV.Domain.Ports;
@@ -139,7 +137,7 @@ public class PlanServices
         catch (Exception ex)
         {
             Console.WriteLine($"\nError al obtener todos los planes: {ex.Message}");
-            return new List<Plan>(); // Retornar lista vacía en caso de error
+            return new List<Plan>(); 
         }
     }
     
