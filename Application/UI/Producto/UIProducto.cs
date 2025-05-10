@@ -49,7 +49,7 @@ public class UIProducto
                 case "0":
                     return;
                 default:
-                    Console.WriteLine("❌ Opción inválida.");
+                    Console.WriteLine("❌ Opción no valida.");
                     break;
             }
 

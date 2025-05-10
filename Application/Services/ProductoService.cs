@@ -23,8 +23,9 @@ namespace SistemaGestorV.Application.Services
             Console.WriteLine("\n--- Lista de Productos ---");
             foreach (var producto in productos)
             {
-                Console.WriteLine($"ID: {producto.id}, Nombre: {producto.nombre}, Stock: {producto.stock}");
+                Console.WriteLine($" 🧾 ID: {producto.id}, Nombre: {producto.nombre}, Stock: {producto.stock}");
             }
+            Console.WriteLine(new string('-', 60));
         }
 
         // Crea un nuevo producto

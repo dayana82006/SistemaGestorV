@@ -1,11 +1,6 @@
 using MySql.Data.MySqlClient;
 using SistemaGestorV.Domain.Entities;
 using SistemaGestorV.Domain.Ports;
-using SistemaGestorV.Infrastructure.Mysql;
-using SistemaGestorV.Infrastructure.Repositories;
-using System.Collections.Generic;
-using MySql.Data.MySqlClient;   
-
 using System;
 using System.Collections.Generic;
 
