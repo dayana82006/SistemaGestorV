@@ -1,14 +1,9 @@
-<<<<<<< HEAD
+
 using System;
 using SistemaGestorV.Domain.Ports;
 using SistemaGestorV.Infrastructure.Repositories;
 using SistemaGestorV.Domain.Factory;
 
-=======
-using SistemaGestorV.Domain.Factory;
-using SistemaGestorV.Domain.Ports;
-using SistemaGestorV.Infrastructure.Repositories;
->>>>>>> feature/manejoCompras
 
 namespace SistemaGestorV.Infrastructure.Mysql;
 
@@ -30,16 +25,11 @@ public class MySqlDbFactory : IDbFactory
         return new MySqlTerceroRepository(_connectionString);
     }
 
-<<<<<<< HEAD
-        public ITerceroRepository CrearTerceroRepository()
-        {
-            return new MySqlTerceroRepository(_connectionString);
-        }
         public IPlanesRepository CrearPlanesRepository()
         {
             return new MySqlPlanesRepository(_connectionString);
         }
-=======
+
     public ICompraRepository CrearCompraRepository()
     {
         return new ImpCompraRepository(_connectionString);
@@ -48,6 +38,4 @@ public class MySqlDbFactory : IDbFactory
     {
         return new ImpDetalleCompraRepository(_connectionString);
     }
->>>>>>> feature/manejoCompras
 }
-

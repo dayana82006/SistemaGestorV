@@ -1609,19 +1609,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\merli\\.nuget\\packages\\": {}
+    "C:\\Users\\Dayana\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\merli\\Downloads\\SGI\\SistemaGestorV\\SistemaGestorV.csproj",
+      "projectUniqueName": "C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\SistemaGestorV.csproj",
       "projectName": "SistemaGestorV",
-      "projectPath": "C:\\Users\\merli\\Downloads\\SGI\\SistemaGestorV\\SistemaGestorV.csproj",
-      "packagesPath": "C:\\Users\\merli\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\merli\\Downloads\\SGI\\SistemaGestorV\\obj\\",
+      "projectPath": "C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\SistemaGestorV.csproj",
+      "packagesPath": "C:\\Users\\Dayana\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Dayana\\OneDrive\\Documentos\\CampusJ1\\C#\\SistemaGestorV\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\merli\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Dayana\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"

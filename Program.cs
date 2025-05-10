@@ -4,12 +4,9 @@ using SistemaGestorV.Application.UI.Producto;
 using SistemaGestorV.Application.UI.Tercero;
 
 using SistemaGestorV;
-<<<<<<< HEAD
-using SistemaGestorV.Application.UI;
-=======
-using SistemaGestorV.Application.UI.Compras;
->>>>>>> feature/manejoCompras
 
+using SistemaGestorV.Application.UI;
+using SistemaGestorV.Application.UI.Compras;
 
 internal class Program
 {
@@ -41,13 +38,12 @@ internal class Program
         IDbFactory factory = new MySqlDbFactory(connectionString);
         var uiProductos = new UIProducto(factory);
         var uiTerceros = new UITercero(factory);
-<<<<<<< HEAD
+
         var uiPlanes = new UIPlanes(factory);
         
-=======
+
         var uiCompras = new UICompra(factory);
 
->>>>>>> feature/manejoCompras
         MostrarBarraDeCarga();
 
         bool salir = false;
@@ -67,11 +63,9 @@ internal class Program
                     uiTerceros.GestionarTerceros();
                     break;
                 case 3:
-<<<<<<< HEAD
                     uiPlanes.GestionarPlanes();
-=======
                    Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
->>>>>>> feature/manejoCompras
+
                     break;
                 case 4:
                     uiCompras.MostrarMenu();
