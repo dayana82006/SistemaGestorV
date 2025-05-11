@@ -4,7 +4,6 @@ using SistemaGestorV.Domain.Ports;
 using SistemaGestorV.Infrastructure.Repositories;
 using SistemaGestorV.Domain.Factory;
 
-
 namespace SistemaGestorV.Infrastructure.Mysql;
 
 public class MySqlDbFactory : IDbFactory
@@ -38,4 +37,30 @@ public class MySqlDbFactory : IDbFactory
     {
         return new ImpDetalleCompraRepository(_connectionString);
     }
+    public IPaisRepository CrearPaisRepository()
+    {
+        return new ImpPaisRepository(_connectionString);
+    }
+    public IEpsRepository CrearEpsRepository()
+    {
+        return new ImpEpsRepository(_connectionString);
+    }
+    public ImpArlRepository CrearArlRepository()
+    {
+        return new ImpArlRepository(_connectionString);
+    }
+    public ImpTipoDocumentoRepository CrearTipoDocumentoRepository()
+    {
+        return new ImpTipoDocumentoRepository(_connectionString);
+    }
+    public ImpRegionRepository CrearRegionRepository()
+    {
+        return new ImpRegionRepository(_connectionString);
+    }
+    public ImpCiudadRepository CrearCiudadRepository()
+    {
+        return new ImpCiudadRepository(_connectionString);
+    }
+
+
 }
