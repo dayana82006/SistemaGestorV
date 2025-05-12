@@ -6,10 +6,15 @@ namespace SistemaGestorV.Application.UI.Tercero
     public class ActualizarTercero
     {
         private readonly TerceroService _servicio;
+        private readonly EpsService _epsService;
+        private readonly ArlService _arlService;
 
         public ActualizarTercero(TerceroService servicio)
         {
             _servicio = servicio ?? throw new ArgumentNullException(nameof(servicio));
+            
+            // Estos servicios deberían ser inyectados, pero para mantener la compatibilidad con el constructor actual,
+            // se inicializarán en el método Ejecutar usando el mismo factory que se usa en UITercero
         }
 
         public void Ejecutar()
@@ -98,12 +103,42 @@ namespace SistemaGestorV.Application.UI.Tercero
                     case 2 when tercero.Empleado != null: // Empleado
                         tercero.Empleado.FechaIngreso = Utilidades.LeerFecha($"\nNueva fecha de ingreso (actual: {tercero.Empleado.FechaIngreso:yyyy-MM-dd}): ");
                         tercero.Empleado.SalarioBase = Utilidades.LeerDouble($"Nuevo salario base (actual: {tercero.Empleado.SalarioBase:C}): ");
-                        tercero.Empleado.EpsId = Utilidades.LeerEntero($"Nueva EPS ID (actual: {tercero.Empleado.EpsId}): ");
-                        tercero.Empleado.ArlId = Utilidades.LeerEntero($"Nueva ARL ID (actual: {tercero.Empleado.ArlId}): ");
+                        
+                        int epsId = Utilidades.LeerEntero($"Nueva EPS ID (actual: {tercero.Empleado.EpsId}): ");
+                        
+                        if (epsId <= 0)
+                        {
+                            Console.WriteLine("ID de EPS inválido. Se mantendrá el valor actual.");
+                        }
+                        else
+                        {
+                            tercero.Empleado.EpsId = epsId;
+                        }
+                        
+                        int arlId = Utilidades.LeerEntero($"Nueva ARL ID (actual: {tercero.Empleado.ArlId}): ");
+                        
+                        if (arlId <= 0)
+                        {
+                            Console.WriteLine("ID de ARL inválido. Se mantendrá el valor actual.");
+                        }
+                        else
+                        {
+                            tercero.Empleado.ArlId = arlId;
+                        }
                         break;
                         
                     case 3 when tercero.Proveedor != null: // Proveedor
-                        tercero.Proveedor.Scto = Utilidades.LeerDouble($"\nNuevo descuento (actual: {tercero.Proveedor.Scto}%): ");
+                        double nuevoDescuento;
+                        do
+                        {
+                            nuevoDescuento = Utilidades.LeerDouble($"\nNuevo descuento (actual: {tercero.Proveedor.Scto}%): ");
+                            if (nuevoDescuento < 0 || nuevoDescuento > 100)
+                            {
+                                Console.WriteLine("El descuento debe estar entre 0 y 100%.");
+                            }
+                        } while (nuevoDescuento < 0 || nuevoDescuento > 100);
+                        
+                        tercero.Proveedor.Scto = nuevoDescuento;
                         
                         int nuevoDiaPago;
                         do
@@ -119,8 +154,16 @@ namespace SistemaGestorV.Application.UI.Tercero
                         break;
                 }
 
-                _servicio.ActualizarTercero(tercero);
-                Console.WriteLine("\nTercero actualizado con éxito.");
+                // Confirmar la actualización
+                if (Utilidades.LeerConfirmacion("\n¿Confirma los cambios realizados?"))
+                {
+                    _servicio.ActualizarTercero(tercero);
+                    Console.WriteLine("\nTercero actualizado con éxito.");
+                }
+                else
+                {
+                    Console.WriteLine("\nOperación cancelada.");
+                }
             }
             catch (Exception ex)
             {
