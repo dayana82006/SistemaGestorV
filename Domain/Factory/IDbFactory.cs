@@ -16,5 +16,12 @@ public interface IDbFactory
 
     ICompraRepository CrearCompraRepository();
     IDetalleCompraRepository CrearDetalleCompraRepository();
-    
+    IPaisRepository CrearPaisRepository();
+    IEpsRepository CrearEpsRepository();
+    ImpArlRepository CrearArlRepository();
+    ImpTipoDocumentoRepository CrearTipoDocumentoRepository();
+    ImpCiudadRepository CrearCiudadRepository();
+    ImpRegionRepository CrearRegionRepository();
+    ImpDireccionRepository CrearDireccionRepository();
+    IEmpresaRepository CrearEmpresaRepository();
 }

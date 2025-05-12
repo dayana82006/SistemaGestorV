@@ -7,7 +7,14 @@ using SistemaGestorV;
 
 using SistemaGestorV.Application.UI;
 using SistemaGestorV.Application.UI.Compras;
-
+using SistemaGestorV.Application.UI.Pais;
+using SistemaGestorV.Application.UI.Eps;
+using SistemaGestorV.Application.UI.Arl;
+using SistemaGestorV.Application.UI.TipoDocumento;
+using SistemaGestorV.Application.UI.Regiones;
+using SistemaGestorV.Application.UI.Ciudades;
+using SistemaGestorV.Application.UI.Direcciones;
+using SistemaGestorV.Application.UI.Empresas;
 internal class Program
 {
     private static void MostrarBarraDeCarga()
@@ -24,12 +31,22 @@ internal class Program
     private static string MostrarMenu()
     {
         return "========= MENÚ PRINCIPAL =========\n\n" +
-               "1. Gestión de Productos\n" +
-               "2. Gestión de Terceros\n" +
-               "3. Planes de Promoción\n" +
-               "4. Compras\n" +
-               "5. Ventas\n" +
-               "0. Salir\n";
+                "Bienvenido al Sistema de Gestión\n" +
+                "1. Gestión de Países\n" +  
+                "2. Gestión de Regiones\n" +
+                "3. Gestión de Ciudades\n" +
+                "4. Gestión de Direcciones\n" +
+                "5. Gestión de Empresas\n" +
+                "6. Gestión de Tipos de Documento\n" +
+                "7. Gestión de EPS\n" +
+                "8. Gestión de ARL\n" +
+                "9. Gestión de Productos\n" +
+                "10. Gestión de Terceros\n" +
+                "11. Gestión de Planes\n" +
+                "12. Gestión de Compras\n" +
+                "13. Gestión de Ventas\n" +
+                "0. Salir\n" +
+                "==================================\n";
     }
 
     private static void Main(string[] args)
@@ -38,12 +55,16 @@ internal class Program
         IDbFactory factory = new MySqlDbFactory(connectionString);
         var uiProductos = new UIProducto(factory);
         var uiTerceros = new UITercero(factory);
-
         var uiPlanes = new UIPlanes(factory);
-        
-
+        var uiPais = new UIPais(factory);
         var uiCompras = new UICompra(factory);
-
+        var uiEps = new UIEps(factory);
+        var uiArl = new UIArl(factory);
+        var uiTipoDocumento = new UITipoDocumento(factory);
+        var uiRegion = new UIRegion(factory);
+        var uiCiudad = new UICiudad(factory);
+        var uiDirecciones = new UIDireccion(factory);
+        var uiEmpresa = new UIEmpresa(factory);
         MostrarBarraDeCarga();
 
         bool salir = false;
@@ -57,20 +78,42 @@ internal class Program
             switch (opcion)
             {
                 case 1:
-                    uiProductos.MostrarMenu();
+                    uiPais.GestionPaises();
                     break;
                 case 2:
-                    uiTerceros.GestionarTerceros();
+                    uiRegion.GestionRegion();
                     break;
                 case 3:
-                    uiPlanes.GestionarPlanes();
-                   Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
-
+                    uiCiudad.GestionCiudad();
                     break;
                 case 4:
-                    uiCompras.MostrarMenu();
+                    uiDirecciones.GestionDireccion();
                     break;
                 case 5:
+                    uiEmpresa.GestionEmpresa();
+                    break;
+                case 6:
+                    uiTipoDocumento.GestionTipoDocumento();
+                    break;
+                case 7: 
+                    uiEps.GestionEpses();
+                    break;
+                case 8:
+                    uiArl.GestionArl();
+                    break;
+                case 9:
+                    uiProductos.MostrarMenu();
+                    break;
+                case 10:
+                    uiTerceros.GestionarTerceros();
+                    break;
+                case 11:
+                    uiPlanes.GestionarPlanes();
+                    break;
+                case 12:
+                    uiCompras.MostrarMenu();
+                    break;
+                case 13:
                     Console.WriteLine("===== VENTAS =====\n");
                     break;
                 case 0:
