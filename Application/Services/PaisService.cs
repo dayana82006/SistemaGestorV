@@ -41,7 +41,7 @@ namespace SistemaGestorV.Application.Services
 
             if (pais == null)
             {
-                Console.WriteLine("❌ Pais no encontrada.");
+                Console.WriteLine("❌ Pais no encontrado.");
                 return false;
             }
 
@@ -58,7 +58,7 @@ namespace SistemaGestorV.Application.Services
 
             if (pais == null)
             {
-                Console.WriteLine("Pais no encontrada.");
+                Console.WriteLine("Pais no encontrado.");
                 return;
             }
 
@@ -75,6 +75,5 @@ namespace SistemaGestorV.Application.Services
         {
             return _repo.ObtenerPorId(id);
         }
-        
     }
 }

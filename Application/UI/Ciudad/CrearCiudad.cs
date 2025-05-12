@@ -3,33 +3,33 @@ using System.Linq;
 using SistemaGestorV.Domain.Entities;
 using SistemaGestorV.Application.Services;
 
-namespace SistemaGestorV.Application.UI.Ciudad
+namespace SistemaGestorV.Application.UI.Ciudades
 {
     public class CrearCiudad
     {
-        private readonly CiudadService _servicio;
+        private readonly CiudadService _ciudadServicio;
+        private readonly RegionService _regionServicio;
 
-        public CrearCiudad(CiudadService servicio)
+        public CrearCiudad(CiudadService ciudadServicio, RegionService regionServicio)
         {
-            _servicio = servicio;
+            _ciudadServicio = ciudadServicio;
+            _regionServicio = regionServicio;
         }
 
         public void Ejecutar()
         {
-            var ciudad = new SistemaGestorV.Domain.Entities.Ciudad();
+            var ciudad = new Ciudad();
 
             Console.Write("Id: ");
-            string id = Console.ReadLine()?.Trim() ?? string.Empty;
+            string idInput = Console.ReadLine()?.Trim() ?? string.Empty;
 
-            if (!int.TryParse(id, out int idInt))
+            if (!int.TryParse(idInput, out int id))
             {
                 Console.WriteLine("❌ El ID debe ser un número entero válido.");
                 return;
             }
 
-            var ciudadesExistentes = _servicio.ObtenerTodos();
-
-            if (ciudadesExistentes.Any(c => c.id == idInt))
+            if (_ciudadServicio.ObtenerTodos().Any(c => c.id == id))
             {
                 Console.WriteLine("❌ Ya existe una ciudad con ese ID.");
                 return;
@@ -44,17 +44,35 @@ namespace SistemaGestorV.Application.UI.Ciudad
                 return;
             }
 
-            if (ciudadesExistentes.Any(c => c.nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase)))
+            if (_ciudadServicio.ObtenerTodos().Any(c => c.nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase)))
             {
                 Console.WriteLine("❌ Ya existe una ciudad con ese nombre.");
                 return;
             }
 
-            ciudad.id = idInt;
-            ciudad.nombre = nombre;
+            Console.Write("ID de la región asociada: ");
+            string regionIdInput = Console.ReadLine()?.Trim() ?? string.Empty;
 
-            _servicio.CrearCiudad(ciudad);
-            Console.WriteLine("✅ Ciudad creado con éxito.");
+            if (!int.TryParse(regionIdInput, out int regionId))
+            {
+                Console.WriteLine("❌ El ID de la región debe ser un número válido.");
+                return;
+            }
+
+            var region = _regionServicio.ObtenerPorId(regionId.ToString());
+
+            if (region == null)
+            {
+                Console.WriteLine("❌ Ese ID no existe en región. Regístrelo primero.");
+                return;
+            }
+
+            ciudad.id = id;
+            ciudad.nombre = nombre;
+            ciudad.regionId = regionId;
+
+            _ciudadServicio.CrearCiudad(ciudad);
+            Console.WriteLine("✅ ciudad creada con éxito.");
         }
     }
 }

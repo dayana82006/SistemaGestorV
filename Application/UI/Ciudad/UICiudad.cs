@@ -3,15 +3,17 @@ using SistemaGestorV.Application.Services;
 using SistemaGestorV.Domain.Factory;
 using SistemaGestorV.Domain.Ports;
 
-namespace SistemaGestorV.Application.UI.Ciudad;
+namespace SistemaGestorV.Application.UI.Ciudades;
 
 public class UICiudad
 {
-    private readonly CiudadService _servicio;
+    private readonly CiudadService _ciudadServicio;
+    private readonly RegionService _regionServicio;
     public UICiudad(IDbFactory factory)
     {
 
-        _servicio = new CiudadService(factory.CrearCiudadRepository());
+        _ciudadServicio = new CiudadService(factory.CrearCiudadRepository());
+        _regionServicio = new RegionService(factory.CrearRegionRepository());
     }
 
 
@@ -32,18 +34,18 @@ public class UICiudad
             switch (opcion)
             {
                 case "1":
-                    _servicio.MostrarTodos();
+                    _ciudadServicio.MostrarTodos();
                     break;
                 case "2":
-                    var crear = new CrearCiudad(_servicio);
+                    var crear = new CrearCiudad(_ciudadServicio, _regionServicio);
                     crear.Ejecutar();
                     break;
                 case "3":
-                    var actualizar = new ActualizarCiudad(_servicio);
+                    var actualizar = new ActualizarCiudad(_regionServicio, _ciudadServicio);
                     actualizar.Ejecutar();
                     break;
                 case "4":
-                    var eliminar = new EliminarCiudad(_servicio);
+                    var eliminar = new EliminarCiudad(_ciudadServicio);
                     eliminar.Ejecutar();
                     break;
                 case "0":

@@ -12,6 +12,9 @@ using SistemaGestorV.Application.UI.Eps;
 using SistemaGestorV.Application.UI.Arl;
 using SistemaGestorV.Application.UI.TipoDocumento;
 using SistemaGestorV.Application.UI.Regiones;
+using SistemaGestorV.Application.UI.Ciudades;
+using SistemaGestorV.Application.UI.Direcciones;
+using SistemaGestorV.Application.UI.Empresas;
 internal class Program
 {
     private static void MostrarBarraDeCarga()
@@ -29,18 +32,21 @@ internal class Program
     {
         return "========= MENÚ PRINCIPAL =========\n\n" +
                 "Bienvenido al Sistema de Gestión\n" +
-               "1. Gestión de Productos\n" +
-               "2. Gestión de Terceros\n" +
-               "3. Planes de Promoción\n" +
-               "4. Compras\n" +
-               "5. Ventas\n" +
-               "6. Gestión de Paises\n" +
-               "7. Gestión de EPS\n" +
-               "8. Gestión de ARL\n" +
-               "9. Gestión de Tipo de Documento\n" +
-               "10. Gestión de Regiones\n" +
-               "0. Salir\n" +
-               "---------------------------------\n";
+                "1. Gestión de Países\n" +  
+                "2. Gestión de Regiones\n" +
+                "3. Gestión de Ciudades\n" +
+                "4. Gestión de Direcciones\n" +
+                "5. Gestión de Empresas\n" +
+                "6. Gestión de Tipos de Documento\n" +
+                "7. Gestión de EPS\n" +
+                "8. Gestión de ARL\n" +
+                "9. Gestión de Productos\n" +
+                "10. Gestión de Terceros\n" +
+                "11. Gestión de Planes\n" +
+                "12. Gestión de Compras\n" +
+                "13. Gestión de Ventas\n" +
+                "0. Salir\n" +
+                "==================================\n";
     }
 
     private static void Main(string[] args)
@@ -56,6 +62,9 @@ internal class Program
         var uiArl = new UIArl(factory);
         var uiTipoDocumento = new UITipoDocumento(factory);
         var uiRegion = new UIRegion(factory);
+        var uiCiudad = new UICiudad(factory);
+        var uiDirecciones = new UIDireccion(factory);
+        var uiEmpresa = new UIEmpresa(factory);
         MostrarBarraDeCarga();
 
         bool salir = false;
@@ -69,23 +78,22 @@ internal class Program
             switch (opcion)
             {
                 case 1:
-                    uiProductos.MostrarMenu();
+                    uiPais.GestionPaises();
                     break;
                 case 2:
-                    uiTerceros.GestionarTerceros();
+                    uiRegion.GestionRegion();
                     break;
                 case 3:
-                    uiPlanes.GestionarPlanes();
-                   Console.WriteLine("===== PLANES DE PROMOCIÓN =====\n");
+                    uiCiudad.GestionCiudad();
                     break;
                 case 4:
-                    uiCompras.MostrarMenu();
+                    uiDirecciones.GestionDireccion();
                     break;
                 case 5:
-                    Console.WriteLine("===== VENTAS =====\n");
+                    uiEmpresa.GestionEmpresa();
                     break;
                 case 6:
-                    uiPais.GestionPaises();
+                    uiTipoDocumento.GestionTipoDocumento();
                     break;
                 case 7: 
                     uiEps.GestionEpses();
@@ -94,10 +102,19 @@ internal class Program
                     uiArl.GestionArl();
                     break;
                 case 9:
-                    uiTipoDocumento.GestionTipoDocumento();
+                    uiProductos.MostrarMenu();
                     break;
                 case 10:
-                    uiRegion.GestionRegion();
+                    uiTerceros.GestionarTerceros();
+                    break;
+                case 11:
+                    uiPlanes.GestionarPlanes();
+                    break;
+                case 12:
+                    uiCompras.MostrarMenu();
+                    break;
+                case 13:
+                    Console.WriteLine("===== VENTAS =====\n");
                     break;
                 case 0:
                     Console.WriteLine("¿Está seguro que desea salir? (S/N): ");

@@ -2,7 +2,7 @@ using System;
 using SistemaGestorV.Domain.Ports;
 using SistemaGestorV.Domain.Entities;
 using SistemaGestorV.Application.Services;
-namespace SistemaGestorV.Application.UI.Ciudad;
+namespace SistemaGestorV.Application.UI.Ciudades;
 
 public class EliminarCiudad
 {

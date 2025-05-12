@@ -62,5 +62,13 @@ public class MySqlDbFactory : IDbFactory
         return new ImpCiudadRepository(_connectionString);
     }
 
+    public ImpDireccionRepository CrearDireccionRepository()
+    {
+        return new ImpDireccionRepository(_connectionString);
+    }
 
+    public IEmpresaRepository CrearEmpresaRepository()
+    {
+        return new ImpEmpresaRepository(_connectionString);
+    }
 }

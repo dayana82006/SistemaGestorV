@@ -22,4 +22,6 @@ public interface IDbFactory
     ImpTipoDocumentoRepository CrearTipoDocumentoRepository();
     ImpCiudadRepository CrearCiudadRepository();
     ImpRegionRepository CrearRegionRepository();
+    ImpDireccionRepository CrearDireccionRepository();
+    IEmpresaRepository CrearEmpresaRepository();
 }
