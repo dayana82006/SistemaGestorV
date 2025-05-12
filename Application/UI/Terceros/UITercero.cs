@@ -8,12 +8,23 @@ namespace SistemaGestorV.Application.UI.Tercero
     public class UITercero
     {
         private readonly TerceroService _servicio;
+        private readonly EmpresaService _empresaService;
+        private readonly TipoDocumentoService _tipoDocumentoService;
+        private readonly DireccionService _direccionService;
+        private readonly EpsService _epsService;
+        private readonly ArlService _arlService;
 
         public IDbFactory Factory { get; }
 
         public UITercero(IDbFactory factory)
         {
+            Factory = factory;
             _servicio = new TerceroService(factory.CrearTerceroRepository());
+            _empresaService = new EmpresaService(factory.CrearEmpresaRepository());
+            _tipoDocumentoService = new TipoDocumentoService(factory.CrearTipoDocumentoRepository());
+            _direccionService = new DireccionService(factory.CrearDireccionRepository());
+            _epsService = new EpsService(factory.CrearEpsRepository());
+            _arlService = new ArlService(factory.CrearArlRepository());
         }
 
         public void GestionarTerceros()
@@ -123,7 +134,14 @@ namespace SistemaGestorV.Application.UI.Tercero
 
         private void CrearNuevoTercero()
         {
-            var creador = new CrearTercero(_servicio);
+            var creador = new CrearTercero(
+                _servicio, 
+                _empresaService, 
+                _tipoDocumentoService, 
+                _direccionService, 
+                _epsService, 
+                _arlService);
+                
             creador.Ejecutar();
         }
 

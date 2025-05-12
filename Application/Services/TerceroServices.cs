@@ -55,18 +55,14 @@ public class TerceroService
         if (tercero == null)
             throw new ArgumentException($"No se encontró un tercero con el ID {id}");
 
-        // Actualizar propiedades básicas
         tercero.Nombre = nuevoNombre;
         tercero.Email = nuevoCorreo;
 
-        // Actualizar o agregar teléfono
         if (!string.IsNullOrWhiteSpace(nuevoTelefono))
         {
-            // Si no tiene teléfonos, inicializar la lista
             if (tercero.Telefonos == null)
                 tercero.Telefonos = new List<Telefono>();
 
-            // Si ya tiene un teléfono, actualizar el primero, sino agregar uno nuevo
             if (tercero.Telefonos.Any())
                 tercero.Telefonos.First().Numero = nuevoTelefono;
             else
@@ -93,7 +89,6 @@ public class TerceroService
         {
             Console.WriteLine($"ID: {t.Id}, Nombre: {t.Nombre} {t.Apellidos}, Tipo: {t.TipoTerceroDescripcion}, Email: {t.Email}");
             
-            // Mostrar teléfonos
             if (t.Telefonos?.Count > 0)
             {
                 Console.WriteLine("   Teléfonos:");
@@ -103,7 +98,6 @@ public class TerceroService
                 }
             }
             
-            // Mostrar info específica según tipo
             switch (t.TipoTerceroId)
             {
                 case 1 when t.Cliente != null:
@@ -130,7 +124,6 @@ public class TerceroService
         if (tercero.TipoTerceroId < 1 || tercero.TipoTerceroId > 3)
             throw new ArgumentException("Tipo de tercero inválido");
 
-        // Validar datos específicos según el tipo
         switch (tercero.TipoTerceroId)
         {
             case 1 when tercero.Cliente == null:

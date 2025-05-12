@@ -24,39 +24,93 @@ namespace SistemaGestorV.Application.UI
             {
                 var plan = new Plan();
                 
-                plan.Nombre = SolicitarTexto("\nNombre del plan: ", "El nombre no puede estar vacío.");
+                // Solicitar nombre del plan
+                Console.Write("\nNombre del plan: ");
+                plan.Nombre = Console.ReadLine()?.Trim();
+                if (string.IsNullOrWhiteSpace(plan.Nombre))
+                {
+                    throw new ArgumentException("El nombre no puede estar vacío.");
+                }
                 
-                plan.FechaInicio = SolicitarFecha("Fecha de inicio (dd/mm/aaaa): ", "Fecha de inicio no válida.");
+                // Solicitar fecha de inicio
+                Console.Write("Fecha de inicio (dd/mm/aaaa): ");
+                if (!DateTime.TryParse(Console.ReadLine(), out DateTime fechaInicio))
+                {
+                    throw new ArgumentException("Fecha de inicio no válida.");
+                }
+                plan.FechaInicio = fechaInicio;
                 
-                plan.FechaFin = SolicitarFecha("Fecha de fin (dd/mm/aaaa): ", "Fecha de fin no válida.");
+                // Solicitar fecha de fin
+                Console.Write("Fecha de fin (dd/mm/aaaa): ");
+                if (!DateTime.TryParse(Console.ReadLine(), out DateTime fechaFin))
+                {
+                    throw new ArgumentException("Fecha de fin no válida.");
+                }
+                plan.FechaFin = fechaFin;
                 
                 if (plan.FechaInicio >= plan.FechaFin)
                 {
                     throw new ArgumentException("La fecha de inicio debe ser anterior a la fecha de fin.");
                 }
                 
-                plan.dcto = SolicitarNumeroDecimal("Porcentaje de descuento: ", "El descuento debe ser un número válido.");
+                // Solicitar porcentaje de descuento
+                Console.Write("Porcentaje de descuento: ");
+                if (!double.TryParse(Console.ReadLine(), out double descuento))
+                {
+                    throw new ArgumentException("El descuento debe ser un número válido.");
+                }
+                plan.dcto = descuento;
                 
                 if (plan.dcto < 0 || plan.dcto > 100)
                 {
                     throw new ArgumentException("El porcentaje de descuento debe estar entre 0 y 100.");
                 }
                 
+                // Obtener productos disponibles
                 var productos = _planServices.ObtenerProductos();
                 var productosSeleccionados = new List<string>();
                 
                 if (productos != null && productos.Count > 0)
                 {
-                    // Mostrar productos disponibles
                     Console.WriteLine("\nProductos disponibles:");
                     foreach (var producto in productos)
                     {
                         Console.WriteLine($"ID: {producto.id} - Nombre: {producto.nombre}");
                     }
                     
-                    // Solicitar productos uno por uno
-                    Console.WriteLine("\nSelección de productos - Se agregarán uno por uno");
-                    productosSeleccionados = SolicitarProductosUnoAUno(productos);
+                    // Solicitar IDs de productos
+                    Console.Write("\nIngrese los IDs de los productos a asociar (separados por comas): ");
+                    var idsInput = Console.ReadLine()?.Trim();
+                    
+                    if (!string.IsNullOrWhiteSpace(idsInput))
+                    {
+                        var ids = idsInput.Split(',').Select(id => id.Trim()).ToList();
+                        
+                        foreach (var id in ids)
+                        {
+                            var producto = productos.FirstOrDefault(p => 
+                                string.Equals(p.id.ToString(), id, StringComparison.OrdinalIgnoreCase));
+                            
+                            if (producto != null)
+                            {
+                                // SOLUCIÓN CLAVE: Convertir el ID alfanumérico a numérico si es necesario
+                                // Asumiendo que el ID real en BD es numérico aunque se muestre con prefijo
+                                if (int.TryParse(ExtraerNumeros(producto.id.ToString()), out int idNumerico))
+                                {
+                                    productosSeleccionados.Add(idNumerico.ToString());
+                                    Console.WriteLine($"- Producto '{producto.nombre}' agregado (ID numérico: {idNumerico})");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"- El ID '{producto.id}' no tiene formato convertible a número");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"- El producto con ID '{id}' no existe");
+                            }
+                        }
+                    }
                 }
                 else
                 {
@@ -64,155 +118,35 @@ namespace SistemaGestorV.Application.UI
                 }
                 
                 // Confirmar creación
-                if (!ConfirmarOperacion("\n¿Crear este plan? (S/N): "))
+                Console.Write("\n¿Crear este plan? (S/N): ");
+                var respuesta = Console.ReadLine()?.Trim().ToUpper();
+                if (respuesta != "S")
                 {
                     Console.WriteLine("Operación cancelada.");
                     return;
                 }
                 
+                // Crear el plan
                 _planServices.CrearPlan(plan, productosSeleccionados);
+                Console.WriteLine("Plan creado exitosamente!");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"\nError al crear el plan: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Detalles: {ex.InnerException.Message}");
+                }
             }
             
             Console.WriteLine("\nPresione cualquier tecla para continuar...");
             Console.ReadKey();
         }
-        
-        private string SolicitarTexto(string mensaje, string mensajeError)
-        {
-            string texto;
-            do
-            {
-                Console.Write(mensaje);
-                texto = Console.ReadLine()?.Trim();
-                
-                if (string.IsNullOrWhiteSpace(texto))
-                {
-                    Console.WriteLine(mensajeError);
-                }
-            } while (string.IsNullOrWhiteSpace(texto));
-            
-            return texto;
-        }
 
-        private DateTime SolicitarFecha(string mensaje, string mensajeError)
+        private string ExtraerNumeros(string input)
         {
-            DateTime fecha;
-            bool esValido;
-            
-            do
-            {
-                Console.Write(mensaje);
-                esValido = DateTime.TryParse(Console.ReadLine(), out fecha);
-                
-                if (!esValido)
-                {
-                    Console.WriteLine(mensajeError);
-                }
-            } while (!esValido);
-            
-            return fecha;
-        }
-
-        private double SolicitarNumeroDecimal(string mensaje, string mensajeError)
-        {
-            double numero;
-            bool esValido;
-            
-            do
-            {
-                Console.Write(mensaje);
-                esValido = double.TryParse(Console.ReadLine(), out numero);
-                
-                if (!esValido)
-                {
-                    Console.WriteLine(mensajeError);
-                }
-            } while (!esValido);
-            
-            return numero;
-        }
-
-        private int SolicitarNumeroEntero(string mensaje, string mensajeError)
-        {
-            int numero;
-            bool esValido;
-            
-            do
-            {
-                Console.Write(mensaje);
-                esValido = int.TryParse(Console.ReadLine(), out numero);
-                
-                if (!esValido)
-                {
-                    Console.WriteLine(mensajeError);
-                }
-            } while (!esValido);
-            
-            return numero;
-        }
-
-        private bool ConfirmarOperacion(string mensaje)
-        {
-            Console.Write(mensaje);
-            var respuesta = Console.ReadLine()?.Trim().ToUpper();
-            return respuesta == "S";
-        }
-
-        private List<string> SolicitarProductosUnoAUno(List<SistemaGestorV.Domain.Entities.Producto> productos)
-        {
-            var productosSeleccionados = new List<string>();
-            bool continuarAgregando = true;
-            
-            while (continuarAgregando)
-            {
-                Console.Write("\nIngrese el ID del producto a agregar: ");
-                var idProducto = Console.ReadLine()?.Trim();
-                
-                if (string.IsNullOrWhiteSpace(idProducto))
-                {
-                    Console.WriteLine("ID de producto no válido.");
-                    continue;
-                }
-                
-                // Buscar producto comparando el id como string para evitar conversiones
-                var productoEncontrado = productos.FirstOrDefault(p => p.id != null && p.id.ToString() == idProducto);
-                
-                if (productoEncontrado == null)
-                {
-                    Console.WriteLine($"El producto con ID '{idProducto}' no existe. Debe registrar primero el producto con ese ID.");
-                    
-                    // Preguntar si desea continuar agregando productos
-                    if (!ConfirmarOperacion("¿Desea agregar otro producto? (S/N): "))
-                    {
-                        continuarAgregando = false;
-                    }
-                    continue;
-                }
-                
-                // Verificar si el producto ya está seleccionado
-                if (productosSeleccionados.Contains(productoEncontrado.nombre))
-                {
-                    Console.WriteLine($"El producto '{productoEncontrado.nombre}' ya está seleccionado.");
-                }
-                else
-                {
-                    // Agregar el nombre del producto, no el ID
-                    productosSeleccionados.Add(productoEncontrado.nombre);
-                    Console.WriteLine($"Producto '{productoEncontrado.nombre}' agregado correctamente.");
-                }
-                
-                // Preguntar si desea continuar agregando productos
-                if (!ConfirmarOperacion("¿Desea agregar otro producto? (S/N): "))
-                {
-                    continuarAgregando = false;
-                }
-            }
-            
-            return productosSeleccionados;
+            // Extrae solo los dígitos numéricos de un string
+            return new string(input.Where(char.IsDigit).ToArray());
         }
     }
 }
